@@ -8,6 +8,7 @@ import bookmarks.BlogBookmark;
 import bookmarks.BookBookmark;
 import bookmarks.OtherBookmark;
 import app.domain.Tag;
+import app.io.IO;
 
 import java.util.List;
 import java.io.File;
@@ -109,7 +110,7 @@ public class TextUITest {
 
     @Test
     public void askForTags() {
-        StubIO io = new StubIO("a,b,c,d");
+        IO io = new StubIO("a,b,c,d");
         TextUI ui = new TextUI(io);
         List<Tag> tags = ui.askForTags();
         assertEquals(tags.get(0).getName(), "a");

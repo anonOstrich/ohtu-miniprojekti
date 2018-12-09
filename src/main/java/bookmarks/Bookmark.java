@@ -1,15 +1,14 @@
 package bookmarks;
 
 import app.domain.Tag;
+import app.io.IO;
+import app.io.StubIO;
 import app.utilities.Utilities;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
-import static org.h2.expression.Function.CURRENT_TIMESTAMP;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -35,7 +34,6 @@ public abstract class Bookmark {
 
     String description;
 
-    
     // columnDefinintion is the only way (that I found) to set default values
     // in database. This allows for inserting data outside the Java program, 
     // and not have the fields be null!
@@ -45,7 +43,7 @@ public abstract class Bookmark {
     Date created;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated",  columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "updated", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     Date updated;
 
@@ -126,7 +124,7 @@ public abstract class Bookmark {
     public String tagsStr() {
         return Utilities.formStringSeparatedByCommas(tags);
     }
-    
+
     public void setUrl(String url) {
     }
 
@@ -139,6 +137,55 @@ public abstract class Bookmark {
                 + " Created: " + created + "\n"
                 + " Last edited: " + updated;
         return result;
+    }
+
+    /**
+     * Prints all the fields of the bookmark
+     * 
+     * <p>If the IO class is a stub for testing, the toString return value
+     * is printed as such. Otherwise the value of the title field is printed in cyan, 
+     * and everything else in the default color</p>
+     * 
+     * @param io IO object used for printing
+     */
+    public void printInfo(IO io) {
+        String info = this.toString();
+
+        if (io.getClass() == StubIO.class) {
+            io.println(info);
+            return; 
+        }
+        
+        int indexOfTitleLabel = info.indexOf(" Title:");
+        indexOfTitleLabel += 7;
+        int indexOfTagsLabel = info.indexOf(" Tags:");
+        io.print(info.substring(0, indexOfTitleLabel));
+        io.cyanPrint(info.substring(indexOfTitleLabel, indexOfTagsLabel));
+        io.println(info.substring(indexOfTagsLabel));
+    }
+
+    /**
+     * Prints the essential fields and their values of this bookmark
+     * 
+     * <p>Prints the summary of the bookmark. Everything will be printed with
+     * the basic print method of the IO object, if that object is an instance of StubIO class; 
+     * in such a case the color of the ouput is not needed. In other cases
+     * the value of the title field will be printed in cyan, and everything else 
+     * in the default color.</p>
+     * 
+     * @param io IO object used for printing
+     */
+    public void printShortInfo(IO io) {
+        String info = this.shortPrint();
+        if (io.getClass() == StubIO.class) {
+            io.println(info);
+        } else {
+            int titleIdx = info.indexOf("Title: ");
+            titleIdx += 7;
+            io.print(info.substring(0, titleIdx));
+            io.cyanPrint(info.substring(titleIdx, titleIdx + this.title.length()));
+            io.println(info.substring(titleIdx + this.title.length()));
+        }
     }
 
     public String shortPrint() {

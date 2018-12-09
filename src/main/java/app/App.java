@@ -16,9 +16,7 @@ public class App {
     private BookMarkDAO dao;
 
     public App(IO io) {
-        this.io = io;
-        this.ui = new TextUI(io);
-        this.dao = new BookMarkDAO();
+        this(io, new BookMarkDAO());
     }
 
     public App(IO io, BookMarkDAO dao) {
@@ -61,14 +59,14 @@ public class App {
                     newEntry = ui.askForNewField(editfield);
                 }
 
-                if (dao.editEntry(editID, editfield, newEntry, tagList)){
+                if (dao.editEntry(editID, editfield, newEntry, tagList)) {
                     ui.viewBookmarkEditedMessage();
                 }
 
             } else if (command.equals("5") || command.equals("delete")) {
                 Long bookmark_id = ui.askForBookmarkToDelete(dao.getBookMarksOnDatabase());
                 if (bookmark_id != null) {
-                    if (dao.deleteBookmarkFromDatabase(bookmark_id)){
+                    if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
                         ui.viewBookmarkDeletedMessage();
                     }
                 }
@@ -88,7 +86,7 @@ public class App {
         this.dao.close();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {    
         App app = new App(new ConsoleIO());
         app.run();
         app.close();
