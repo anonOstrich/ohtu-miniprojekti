@@ -12,9 +12,13 @@ public class TextUI {
 
     private final IO io;
     private final String defaultSuccessMessage = "Your bookmark has been read!";
+    private final HashMap<String,String> selectedEditFieldMap = new HashMap<>();
+    private final HashMap<String,String> bookmarkTypeToAskEditFieldPrintMap = new HashMap<>();
 
     public TextUI(IO io) {
         this.io = io;
+        initSelectedEditFieldMap();
+        initBookmarkTypeToAskEditFieldPrintMap();
     }
 
     public void printWelcomeMessage() {
@@ -198,35 +202,38 @@ public class TextUI {
     }
 
     public String askForEditField(String bookmark) {
-        String[] data = bookmark.split(" ");
-        String ask = "Select field to edit:";
-        io.println(data[3]);
-        if (data[3].contains("Book")) {
-            ask += "\nA = Author  \nT = title\nD = description \nX = tags";
-        }
-        if (data[3].contains("Blogpost")) {
-            ask += "\nT = title\nU = url \nD = description \nX = tags ";
-        }
-        if (data[3].contains("Other")) {
-            ask += "\nT = title\nU = url \nD = description \nX = tags";
-        }
-        io.println(ask);
-        String field = io.nextLine();
+        askUserForEditFieldMessage(bookmark);
+
         while (true) {
-            if (field.equals("A")) {
-                return "author";
-            } else if (field.equals("T")) {
-                return "title";
-            } else if (field.equals("U")) {
-                return "url";
-            } else if (field.equals("D")) {
-                return "description";
-            } else if (field.equals("X")) {
-                return "tags";
-            } else {
-                field = io.nextLine();
+            String output = selectedEditFieldMap.get(io.nextLine());
+
+            if (output != null) {
+                return output;
             }
         }
+    }
+
+    private void initSelectedEditFieldMap() {
+        selectedEditFieldMap.put("A", "author");
+        selectedEditFieldMap.put("T", "title");
+        selectedEditFieldMap.put("U", "url");
+        selectedEditFieldMap.put("D", "description");
+        selectedEditFieldMap.put("X", "tags");
+    }
+
+    private void initBookmarkTypeToAskEditFieldPrintMap() {
+        bookmarkTypeToAskEditFieldPrintMap.put("Book", "\nA = Author\nT = title\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Blogpost", "\nT = title\nU = url\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Other", "\nT = title\nU = url\nD = description\nX = tags");
+    }
+
+    private void askUserForEditFieldMessage(String bookmark) {
+        String bookmarkType = bookmark.split(" ")[3].trim();
+        String ask = bookmarkType + "\n\nSelect field to edit:";
+
+        ask += bookmarkTypeToAskEditFieldPrintMap.get(bookmarkType);
+
+        io.println(ask);
     }
 
     public String askForNewField(String field) {
