@@ -28,14 +28,14 @@ public class Stepdefs {
     public void createTestBookmarks() {
         inputLines.add("1");
         inputLines.add("BG");
-        inputLines.add("martindawes.com/cucumberexperience");
+        inputLines.add("www.martindawes.com");
         inputLines.add("Cucumber Experience");
         inputLines.add("cucumber,podcast");
         inputLines.add("Delve into the depths of cucumber.");
 
         inputLines.add("1");
         inputLines.add("B");
-        inputLines.add("12345-abcde");
+        inputLines.add("12345-12345");
         inputLines.add("Cucumber tutorial");
         inputLines.add("Cucumber Chief");
         inputLines.add("cucumber,tutorial");
@@ -43,14 +43,14 @@ public class Stepdefs {
 
         inputLines.add("1");
         inputLines.add("BG");
-        inputLines.add("mrdelete.com/deletecast");
+        inputLines.add("www.mrdelete.com");
         inputLines.add("DeleteCast");
         inputLines.add("deleted");
         inputLines.add("Will be deleted.");
         
         inputLines.add("1");
         inputLines.add("BG");
-        inputLines.add("polarnews.com/antarcticweekly");
+        inputLines.add("www.polarnews.com");
         inputLines.add("Antarctic weekly");
         inputLines.add("antarctic,podcast");
         inputLines.add("Life at the south pole station.");

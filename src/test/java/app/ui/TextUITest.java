@@ -63,7 +63,7 @@ public class TextUITest {
         Bookmark bookmark = ui.askForBookmark();
         try {
             BlogBookmark blog = (BlogBookmark) bookmark;
-            assertEquals("testUrl", blog.getUrl());
+            assertEquals("www.testurl.com", blog.getUrl());
         } catch (Exception e) {
             assertTrue(false);
         }
@@ -85,7 +85,7 @@ public class TextUITest {
 
         try {
             OtherBookmark other = (OtherBookmark) bookmark;
-            assertEquals("otherUrl", other.getUrl());
+            assertEquals("www.otherurl.com", other.getUrl());
         } catch (Exception e) {
             assertTrue(false);
         }
