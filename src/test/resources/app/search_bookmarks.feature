@@ -6,7 +6,7 @@ Feature: Searching for existing bookmarks is possible
         When input "T" is entered
         And input "Cucumber tutorial" is entered
         And app is created
-        Then system response will contain "ISBN: 12345-abcde"
+        Then system response will contain "ISBN: 12345-12345"
 
 
     Scenario: user can search by description and find an existing bookmark
@@ -14,7 +14,7 @@ Feature: Searching for existing bookmarks is possible
         When input "D" is entered
         And input "a tutorial for definition testing" is entered
         And app is created
-        Then system response will contain "ISBN: 12345-abcde"
+        Then system response will contain "ISBN: 12345-12345"
 
     Scenario: user will only find bookmarks that match the search term
         Given option "3" is selected

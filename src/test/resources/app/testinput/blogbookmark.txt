@@ -1,5 +1,5 @@
 BG
-testUrl
+www.testurl.com
 testTitle
 testTag
 testDescription

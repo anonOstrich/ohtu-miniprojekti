@@ -52,7 +52,7 @@ public class BookmarkTest {
 
     public void initializeUniqueClassVariables() {
         ISBN = "12345678";
-        url = "TestUrl";
+        url = "www.testUrl.com";
     }
 
     public void initializeBookmarks() {

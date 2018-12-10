@@ -2,37 +2,59 @@ package app.ui;
 
 import app.domain.Tag;
 import app.io.IO;
+import app.utilities.Validator;
 import bookmarks.Bookmark;
 import bookmarks.BookBookmark;
 import bookmarks.BlogBookmark;
 import bookmarks.OtherBookmark;
 import java.util.*;
 
+/**
+ *
+ * @author jussiste
+ */
 public class TextUI {
 
     private final IO io;
     private final String defaultSuccessMessage = "Your bookmark has been read!";
-    private final HashMap<String,String> selectedEditFieldMap = new HashMap<>();
-    private final HashMap<String,String> bookmarkTypeToAskEditFieldPrintMap = new HashMap<>();
+    private final HashMap<String, String> selectedEditFieldMap = new HashMap<>();
+    private final HashMap<String, String> bookmarkTypeToAskEditFieldPrintMap = new HashMap<>();
 
+    /**
+     * Constructor for class.
+     * @param io input/output device that gets prompts from the terminal
+     */
     public TextUI(IO io) {
         this.io = io;
         initSelectedEditFieldMap();
         initBookmarkTypeToAskEditFieldPrintMap();
     }
 
+    /**
+     * Print the standard welcome message.
+     */
     public void printWelcomeMessage() {
         io.println("Welcome!");
     }
 
+    /**
+     * Print the standard goodbye message.
+     */
     public void printGoodbyeMessage() {
         io.println("Goodbye");
     }
 
+    /**
+     * Prints an error if the userinput is not recognizable.
+     */
     public void printUnrecognizedOption() {
         io.println("Unrecognized option");
     }
 
+    /**
+     * Prints the available menu options and prompts the user to select one.
+     * @return user's choise of command.
+     */
     public String getMenuCommand() {
         io.print("\nSelect one of the following options\n1. ");
         io.redPrint("Add");
@@ -50,6 +72,10 @@ public class TextUI {
         return io.nextLine();
     }
 
+    /**
+     * Asks for the field that user wants to edit.
+     * @return a valid choise if user selection is valid, empty string otherwise. 
+     */
     public String askForField() {
         io.println("Which field would you like to search?");
         io.println("Give field (T = Title) (D = Description)");
@@ -64,11 +90,19 @@ public class TextUI {
         }
     }
 
+    /**
+     * Asks for the search term that user wants to use.
+     * @return
+     */
     public String askForSearch() {
         io.println("Give a search term: ");
         return io.nextLine();
     }
 
+    /**
+     * Ask the user what kind of bookmark they want to make. 
+     * @return bookmark of wanted type
+     */
     public Bookmark askForBookmark() {
         io.println("Add a new bookmark.");
         io.println("Give type (B = Book) (BG = Blog), (O = Other): ");
@@ -94,12 +128,20 @@ public class TextUI {
 
     }
 
+    /**
+     * Asks for the criteria that is used for sorting the list.
+     * @return
+     */
     public String askForListingMethod() {
         io.println("Choose listing method:");
         io.println("(T = Title)(CD = Creation time Descending)(CA = Creation time Ascending)");
         return io.nextLine();
     }
 
+    /**
+     * Prints the given list of bookmarks. If the list is empty prints an error message.
+     * @param bookmarks list of bookmarks
+     */
     public void printBookmarkList(List<Bookmark> bookmarks) {
         io.println("");
         if (bookmarks.isEmpty()) {
@@ -113,7 +155,8 @@ public class TextUI {
 
     private Bookmark askForOtherBookmarkInfo() {
         OtherBookmark bm = new OtherBookmark();
-        String url = askForInput("Url: ");
+        io.println("Url: ");
+        String url = validUrl();
         bm.setUrl(url);
         askForGeneralBookmarkInfo(bm);
         return bm;
@@ -121,7 +164,8 @@ public class TextUI {
 
     private Bookmark askForBookBookmarkInfo() {
         BookBookmark bm = new BookBookmark();
-        String isbn = askForInput("ISBN: ");
+        io.println("ISBN: ");
+        String isbn = validISBN();
         bm.setISBN(isbn);
 
         String title = askForInput("Title: ");
@@ -141,25 +185,31 @@ public class TextUI {
 
     private Bookmark askForBlogBookmarkInfo() {
         BlogBookmark bm = new BlogBookmark();
-        String url = askForInput("Url: ");
+        io.println("Url: ");
+        String url = validUrl();
         bm.setUrl(url);
         askForGeneralBookmarkInfo(bm);
         return bm;
     }
 
     private Bookmark askForGeneralBookmarkInfo(Bookmark bookmark) {
-        String title = askForInput("Title: ");
+        io.println("Title; ");
+        String title = validField();
         bookmark.setTitle(title);
 
         List<Tag> tagsList = askForTags();
         bookmark.setTags(tagsList);
-
-        String description = askForInput("Description: ");
+        io.println("Description");
+        String description = validField();
         bookmark.setDescription(description);
 
         return bookmark;
     }
 
+    /**
+     * Ask for the list of tags. 
+     * @return
+     */
     public List<Tag> askForTags() {
         System.out.println("Tags (separated by commas): ");
         String input = io.nextLine();
@@ -189,18 +239,33 @@ public class TextUI {
         return value;
     }
 
+    /**
+     * Ask for the ID of the bookmark that the user wants to edit. Also prints the list of bookmarks in short form.
+     * @param bookmarks
+     * @return
+     */
     public Long askForBookmarkToEdit(List<Bookmark> bookmarks) {
         io.println("Select an entry to edit by typing its ID: ");
         shortListBookmarks(bookmarks);
         return getInt();
     }
 
+    /**
+     * Ask for the ID of the bookmark that the user wants to delete. Also prints the list of bookmarks in short form.
+     * @param bookmarks
+     * @return
+     */
     public Long askForBookmarkToDelete(List<Bookmark> bookmarks) {
         io.println("Give ID of the bookmark you want to delete: ");
         shortListBookmarks(bookmarks);
         return getInt();
     }
 
+    /**
+     * Asks the user for the field they want to edit. Different bookmarktypes have different fields that can be edited.
+     * @param bookmark string form of bookmark that can be used to determine it's type.
+     * @return
+     */
     public String askForEditField(String bookmark) {
         askUserForEditFieldMessage(bookmark);
 
@@ -236,6 +301,11 @@ public class TextUI {
         io.println(ask);
     }
 
+    /**
+     * Asks the user for a new entry when the user is in edit state.
+     * @param field
+     * @return
+     */
     public String askForNewField(String field) {
         io.println("Give new entry for " + field);
         return io.nextLine();
@@ -246,12 +316,56 @@ public class TextUI {
         return io.nextLine();
     }
 
+    /**
+     * Prints a message when the bookmark is succesfully edited.
+     */
     public void viewBookmarkEditedMessage() {
         io.println("Bookmark successfully edited.");
     }
 
+    /**
+     * Prints a message when the bookmark is succesfully deleted.
+     */
     public void viewBookmarkDeletedMessage() {
         io.println("Bookmark successfully deleted.");
     }
 
+    /**
+     * Check if the url is valid. If the url is invalid it asks for a new url until the requirements are met.
+     * @return
+     */
+    public String validUrl() {
+        String url = io.nextLine();
+        while (!Validator.validUrl(url)) {
+            io.println("The url is not valid. Try again. Remember to start the url with \"www\" or \"https://\"");
+            url = io.nextLine();
+        }
+        return url;
+    }
+
+    /**
+     * Check if the field is valid. If the input is invalid it asks for a new input until the requirements are met.
+     * @return
+     */
+    public String validField() {
+        String title = io.nextLine();
+        while (!Validator.validName(title)) {
+            io.println("This field can't be empty, Please try again.");
+            title = io.nextLine();
+        }
+        return title;
+    }
+
+    /**
+     * Check if the ISBN is valid. If the ISBN is invalid it asks for a new ISBN until the requirements are met.
+     * @return
+     */
+    public String validISBN() {
+        String ISBN = io.nextLine();
+        while (!Validator.validISBN(ISBN)) {
+            io.println("The ISBN is not valid. Try again. The ISBN can contain only numbers and lines.");
+            ISBN = io.nextLine();
+        }
+        return ISBN;
+    }
 }
