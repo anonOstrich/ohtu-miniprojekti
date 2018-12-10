@@ -1,18 +1,40 @@
 package app.domain.command;
 
-import app.io.IO;
+import app.dao.BookMarkDAO;
+import app.domain.Tag;
 import app.ui.TextUI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchCommand extends Command {
 
-    public SearchCommand(TextUI ui) {
-        super(ui);
+    public SearchCommand(TextUI ui, BookMarkDAO dao) {
+        super(ui, dao);
     }
-
 
     @Override
     public void execute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String searchfield = ui.askForField();
+        String search;
+        if (searchfield.equals("tag")) {
+            List<Tag> tags = dao.getTagDAO().getTagsOnDatabase();
+            ui.listTags(tags);
+            search = ui.askForTag();
+            boolean found = false;
+            for (Tag tag : tags) {
+                if (tag.getName().equals(search)) {
+                    ui.printBookmarkList(new ArrayList(tag.getBookmarks()));
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                ui.printTagsNotFound();
+            }
+        } else {
+            search = ui.askForSearch();
+            ui.printBookmarkList(dao.searchField(searchfield, search));
+        }
     }
-    
+
 }

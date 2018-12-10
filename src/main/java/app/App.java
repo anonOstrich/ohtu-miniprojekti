@@ -1,21 +1,19 @@
 package app;
 
 import app.dao.BookMarkDAO;
-import app.domain.Tag;
 import app.domain.command.Command;
+import app.domain.command.CommandGenerator;
 import app.io.ConsoleIO;
 import app.io.IO;
 import app.ui.TextUI;
-import bookmarks.Bookmark;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class App {
-    private Map<String, Command> commandsByNames; 
-    private Map<String, Command> commandsByNumbers; 
+
+    private Map<String, Command> commandsByNames;
+    private Map<String, Command> commandsByNumbers;
 
     private final TextUI ui;
     private IO io;
@@ -29,26 +27,28 @@ public class App {
         this.io = io;
         this.ui = new TextUI(io);
         this.dao = dao;
-        this.commandsByNames = new HashMap(); 
-        this.commandsByNumbers = new HashMap(); 
-        
-        Command newC = Command.newCommand(ui); 
-        commandsByNames.put("new", newC); 
+        this.commandsByNames = new HashMap();
+        this.commandsByNumbers = new HashMap();
+
+        CommandGenerator commandGenerator = new CommandGenerator(ui, dao);
+
+        Command newC = commandGenerator.newCommand();
+        commandsByNames.put("new", newC);
         commandsByNumbers.put("1", newC);
-        
-        Command listC = Command.listCommand(ui);
+
+        Command listC = commandGenerator.listCommand();
         commandsByNames.put("list", listC);
         commandsByNumbers.put("2", listC);
-        
-        Command searchC = Command.searchCommand(ui);
+
+        Command searchC = commandGenerator.searchCommand();
         commandsByNames.put("search", searchC);
         commandsByNumbers.put("3", searchC);
-        
-        Command editC = Command.editCommand(ui);
+
+        Command editC = commandGenerator.editCommand();
         commandsByNames.put("edit", editC);
         commandsByNumbers.put("4", editC);
-        
-        Command deleteC = Command.deleteCommand(ui);
+
+        Command deleteC = commandGenerator.deleteCommand();
         commandsByNames.put("delete", deleteC);
         commandsByNumbers.put("5", deleteC);
     }
@@ -56,74 +56,27 @@ public class App {
     public void run() {
         ui.printWelcomeMessage();
         boolean run = true;
-        String command = "";
+        String input;
         String newEntry = "";
         int safety = 0;
+        Command command;
         //TODO: hide this to an other class
         while (run) {
-            command = ui.getMenuCommand();
+            input = ui.getMenuCommand();
+            command = commandsByNames.get(input) != null ? commandsByNames.get(input) : commandsByNumbers.get(input);
 
-            if (command.equals("1") || command.equals("new")) {
-                Bookmark bookmark = ui.askForBookmark();
-                if (bookmark != null) {
-                    dao.saveBookmarkToDatabase(bookmark);
-                }
-            } else if (command.equals("2") || command.equals("list")) {
-                String method = ui.askForListingMethod();
-                if(method.equals("LT")) {
-                    ui.presentTags(dao.getTagDAO().getTagsOnDatabase());
-                } else ui.printBookmarkList(dao.getBookmarksInOrder(method));
-            } else if (command.equals("3") || command.equals("search")) {
-                String searchfield = ui.askForField();
-                String search;
-                if(searchfield.equals("tag")) {
-                    List<Tag> tags = dao.getTagDAO().getTagsOnDatabase();
-                    ui.listTags(tags);
-                    search = ui.askForTag();
-                    boolean found = false;
-                    for (Tag tag : tags) {
-                        if(tag.getName().equals(search)) {
-                            ui.printBookmarkList(new ArrayList(tag.getBookmarks()));
-                            found = true;
-                            break;
-                        }
-                    }
-                    if(!found) ui.printTagsNotFound();
-                } else {
-                    search = ui.askForSearch();
-                    ui.printBookmarkList(dao.searchField(searchfield, search));
-                }
-            } else if (command.equals("4") || command.equals("edit")) {
-                Long editID = ui.askForBookmarkToEdit(dao.getBookMarksOnDatabase());
-                String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
-                List<Tag> tagList = null;
-                io.println("\nOld values: ");
-                io.println(dao.getSingleBookmarkInfo(editID));
-                if (editfield.equals("tags")) {
-                    tagList = ui.askForTags();
-                } else {
-                    newEntry = ui.askForNewField(editfield);
-                }
-
-                if (dao.editEntry(editID, editfield, newEntry, tagList)) {
-                    ui.viewBookmarkEditedMessage();
-                }
-
-            } else if (command.equals("5") || command.equals("delete")) {
-                Long bookmark_id = ui.askForBookmarkToDelete(dao.getBookMarksOnDatabase());
-                if (bookmark_id != null) {
-                    if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
-                        ui.viewBookmarkDeletedMessage();
-                    }
-                }
-            } else if (command.equals("0") || command.equals("exit")) {
+            if (input.equals("0") || input.equals("exit")) {
                 ui.printGoodbyeMessage();
                 run = false;
-            } else {
+            }
+
+            if (command == null) {
                 ui.printUnrecognizedOption();
                 if (safety++ > 100) {
                     run = false;
                 }
+            } else {
+                command.execute();
             }
         }
     }
@@ -132,7 +85,7 @@ public class App {
         this.dao.close();
     }
 
-    public static void main(String[] args) {    
+    public static void main(String[] args) {
         App app = new App(new ConsoleIO());
         app.run();
         app.close();

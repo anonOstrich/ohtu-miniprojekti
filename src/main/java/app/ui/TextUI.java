@@ -22,6 +22,7 @@ public class TextUI {
 
     /**
      * Constructor for class.
+     *
      * @param io input/output device that gets prompts from the terminal
      */
     public TextUI(IO io) {
@@ -53,6 +54,7 @@ public class TextUI {
 
     /**
      * Prints the available menu options and prompts the user to select one.
+     *
      * @return user's choise of command.
      */
     public String getMenuCommand() {
@@ -74,7 +76,9 @@ public class TextUI {
 
     /**
      * Asks for the field that user wants to edit.
-     * @return a valid choise if user selection is valid, empty string otherwise. 
+     *
+     * @return a valid choise if user selection is valid, empty string
+     * otherwise.
      */
     public String askForField() {
         io.println("Which field would you like to search?");
@@ -94,6 +98,7 @@ public class TextUI {
 
     /**
      * Asks for the search term that user wants to use.
+     *
      * @return
      */
     public String askForSearch() {
@@ -102,7 +107,8 @@ public class TextUI {
     }
 
     /**
-     * Ask the user what kind of bookmark they want to make. 
+     * Ask the user what kind of bookmark they want to make.
+     *
      * @return bookmark of wanted type
      */
     public Bookmark askForBookmark() {
@@ -132,6 +138,7 @@ public class TextUI {
 
     /**
      * Asks for the criteria that is used for sorting the list.
+     *
      * @return
      */
     public String askForListingMethod() {
@@ -142,7 +149,9 @@ public class TextUI {
     }
 
     /**
-     * Prints the given list of bookmarks. If the list is empty prints an error message.
+     * Prints the given list of bookmarks. If the list is empty prints an error
+     * message.
+     *
      * @param bookmarks list of bookmarks
      */
     public void printBookmarkList(List<Bookmark> bookmarks) {
@@ -155,7 +164,7 @@ public class TextUI {
             io.println("==================================================");
         }
     }
-    
+
     public void presentTags(List<Tag> tags) {
         io.println("");
         io.println("Tags:");
@@ -174,7 +183,7 @@ public class TextUI {
             io.println("==============================================");
         }
     }
-    
+
     public void listTags(List<Tag> tags) {
         io.println("");
         io.println("Tags:");
@@ -183,13 +192,13 @@ public class TextUI {
             io.println(tag.toString());
         }
     }
-    
+
     public String askForTag() {
         io.println("");
         io.println("Enter name of the tag to list bookmarks associated with it:");
         return io.nextLine();
     }
-    
+
     public void printTagsNotFound() {
         io.println("No tags with that title were found.");
     }
@@ -248,7 +257,8 @@ public class TextUI {
     }
 
     /**
-     * Ask for the list of tags. 
+     * Ask for the list of tags.
+     *
      * @return
      */
     public List<Tag> askForTags() {
@@ -281,7 +291,9 @@ public class TextUI {
     }
 
     /**
-     * Ask for the ID of the bookmark that the user wants to edit. Also prints the list of bookmarks in short form.
+     * Ask for the ID of the bookmark that the user wants to edit. Also prints
+     * the list of bookmarks in short form.
+     *
      * @param bookmarks
      * @return
      */
@@ -292,7 +304,9 @@ public class TextUI {
     }
 
     /**
-     * Ask for the ID of the bookmark that the user wants to delete. Also prints the list of bookmarks in short form.
+     * Ask for the ID of the bookmark that the user wants to delete. Also prints
+     * the list of bookmarks in short form.
+     *
      * @param bookmarks
      * @return
      */
@@ -303,8 +317,11 @@ public class TextUI {
     }
 
     /**
-     * Asks the user for the field they want to edit. Different bookmarktypes have different fields that can be edited.
-     * @param bookmark string form of bookmark that can be used to determine it's type.
+     * Asks the user for the field they want to edit. Different bookmarktypes
+     * have different fields that can be edited.
+     *
+     * @param bookmark string form of bookmark that can be used to determine
+     * it's type.
      * @return
      */
     public String askForEditField(String bookmark) {
@@ -344,6 +361,7 @@ public class TextUI {
 
     /**
      * Asks the user for a new entry when the user is in edit state.
+     *
      * @param field
      * @return
      */
@@ -372,7 +390,9 @@ public class TextUI {
     }
 
     /**
-     * Check if the url is valid. If the url is invalid it asks for a new url until the requirements are met.
+     * Check if the url is valid. If the url is invalid it asks for a new url
+     * until the requirements are met.
+     *
      * @return
      */
     public String validUrl() {
@@ -385,7 +405,9 @@ public class TextUI {
     }
 
     /**
-     * Check if the field is valid. If the input is invalid it asks for a new input until the requirements are met.
+     * Check if the field is valid. If the input is invalid it asks for a new
+     * input until the requirements are met.
+     *
      * @return
      */
     public String validField() {
@@ -398,7 +420,9 @@ public class TextUI {
     }
 
     /**
-     * Check if the ISBN is valid. If the ISBN is invalid it asks for a new ISBN until the requirements are met.
+     * Check if the ISBN is valid. If the ISBN is invalid it asks for a new ISBN
+     * until the requirements are met.
+     *
      * @return
      */
     public String validISBN() {
@@ -408,5 +432,10 @@ public class TextUI {
             ISBN = io.nextLine();
         }
         return ISBN;
+    }
+
+    public void temporaryMethod(String mjono) {
+        io.println("\nOld values: ");
+        io.println(mjono);
     }
 }

@@ -1,21 +1,22 @@
-
 package app.domain.command;
 
-import app.io.IO;
+import app.dao.BookMarkDAO;
 import app.ui.TextUI;
 
-
 public class ListCommand extends Command {
-    
-    public ListCommand(TextUI ui){
-        super(ui);
+
+    public ListCommand(TextUI ui, BookMarkDAO dao) {
+        super(ui, dao);
     }
-
-
 
     @Override
     public void execute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String method = ui.askForListingMethod();
+        if (method.equals("LT")) {
+            ui.presentTags(dao.getTagDAO().getTagsOnDatabase());
+        } else {
+            ui.printBookmarkList(dao.getBookmarksInOrder(method));
+        }
     }
 
 }

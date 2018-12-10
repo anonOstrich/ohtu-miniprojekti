@@ -1,19 +1,22 @@
 package app.domain.command;
 
-import app.io.IO;
+import app.dao.BookMarkDAO;
 import app.ui.TextUI;
 
-public class DeleteCommand extends Command{
+public class DeleteCommand extends Command {
 
-    public DeleteCommand(TextUI ui) {
-        super(ui);
+    public DeleteCommand(TextUI ui, BookMarkDAO dao) {
+        super(ui, dao);
     }
-
-
 
     @Override
     public void execute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Long bookmark_id = ui.askForBookmarkToDelete(dao.getBookMarksOnDatabase());
+        if (bookmark_id != null) {
+            if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
+                ui.viewBookmarkDeletedMessage();
+            }
+        }
     }
-    
+
 }

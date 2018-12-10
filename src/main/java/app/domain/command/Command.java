@@ -1,36 +1,19 @@
 package app.domain.command;
 
-import app.io.IO;
+import app.dao.BookMarkDAO;
 import app.ui.TextUI;
 
 public abstract class Command {
-
     protected TextUI ui;
-
-    public Command(TextUI ui) {
+    protected BookMarkDAO dao; 
+    
+    public Command(TextUI ui, BookMarkDAO dao) {
         this.ui = ui;
+        this.dao = dao; 
     }
 
     public abstract void execute();
 
-    public static Command newCommand(TextUI ui) {
-        return new NewCommand(ui);
-    }
-    
-    public static Command listCommand(TextUI ui){
-        return new ListCommand(ui);
-    }
-    
-    public static Command searchCommand(TextUI ui){
-        return new SearchCommand(ui);
-    }
-    
-    public static Command deleteCommand(TextUI ui){
-        return new DeleteCommand(ui);
-    }
-    
-    public static Command editCommand(TextUI ui){
-        return new EditCommand(ui);
-    }
+
 
 }
