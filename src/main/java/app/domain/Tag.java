@@ -23,11 +23,7 @@ public class Tag {
     Long id;
     
 
-//    @JoinTable(name = "tag_bookmarks",
-//            joinColumns = {
-//                @JoinColumn(name = "tag_id")},
-//            inverseJoinColumns = {
-//                @JoinColumn(name = "bookmark_id")})
+    
     @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<Bookmark> bookmarks;
