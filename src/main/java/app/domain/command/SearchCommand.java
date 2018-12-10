@@ -13,7 +13,7 @@ public class SearchCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         String searchfield = ui.askForField();
         String search;
         if (searchfield.equals("tag")) {
@@ -35,6 +35,7 @@ public class SearchCommand extends Command {
             search = ui.askForSearch();
             ui.printBookmarkList(dao.searchField(searchfield, search));
         }
+        return true; 
     }
 
 }

@@ -10,13 +10,14 @@ public class ListCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         String method = ui.askForListingMethod();
         if (method.equals("LT")) {
             ui.presentTags(dao.getTagDAO().getTagsOnDatabase());
         } else {
             ui.printBookmarkList(dao.getBookmarksInOrder(method));
         }
+        return true; 
     }
 
 }

@@ -14,7 +14,7 @@ public class EditCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         String newEntry = ""; 
         Long editID = ui.askForBookmarkToEdit(dao.getBookMarksOnDatabase());
         String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
@@ -32,6 +32,7 @@ public class EditCommand extends Command {
         if (dao.editEntry(editID, editfield, newEntry, tagList)) {
             ui.viewBookmarkEditedMessage();
         }
+        return true; 
     }
 
 }

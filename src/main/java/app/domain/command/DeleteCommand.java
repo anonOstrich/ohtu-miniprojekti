@@ -10,13 +10,14 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Long bookmark_id = ui.askForBookmarkToDelete(dao.getBookMarksOnDatabase());
         if (bookmark_id != null) {
             if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
                 ui.viewBookmarkDeletedMessage();
             }
         }
+        return true; 
     }
 
 }

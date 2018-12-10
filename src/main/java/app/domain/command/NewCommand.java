@@ -13,11 +13,12 @@ public class NewCommand extends Command {
 
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Bookmark bookmark = ui.askForBookmark();
         if (bookmark != null) {
             dao.saveBookmarkToDatabase(bookmark);
         }
+        return true; 
     }
 
 }

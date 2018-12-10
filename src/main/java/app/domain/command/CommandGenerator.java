@@ -32,5 +32,9 @@ public class CommandGenerator {
     public Command editCommand() {
         return new EditCommand(ui, dao);
     }
+    
+    public Command exitCommand(){
+        return new ExitCommand(ui, dao);
+    }
 
 }

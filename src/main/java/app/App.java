@@ -32,6 +32,10 @@ public class App {
 
         CommandGenerator commandGenerator = new CommandGenerator(ui, dao);
 
+        Command exitC = commandGenerator.exitCommand();
+        commandsByNames.put("exit", exitC);
+        commandsByNumbers.put("0", exitC);
+
         Command newC = commandGenerator.newCommand();
         commandsByNames.put("new", newC);
         commandsByNumbers.put("1", newC);
@@ -57,28 +61,24 @@ public class App {
         ui.printWelcomeMessage();
         boolean run = true;
         String input;
-        String newEntry = "";
         int safety = 0;
         Command command;
         //TODO: hide this to an other class
+
         while (run) {
             input = ui.getMenuCommand();
             command = commandsByNames.get(input) != null ? commandsByNames.get(input) : commandsByNumbers.get(input);
-
-            if (input.equals("0") || input.equals("exit")) {
-                ui.printGoodbyeMessage();
-                run = false;
-            }
 
             if (command == null) {
                 ui.printUnrecognizedOption();
                 if (safety++ > 100) {
                     run = false;
                 }
-            } else {
-                command.execute();
+                continue;
             }
+            run = command.execute();
         }
+
     }
 
     public void close() {

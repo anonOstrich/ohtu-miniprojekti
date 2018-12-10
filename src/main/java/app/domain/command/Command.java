@@ -12,7 +12,7 @@ public abstract class Command {
         this.dao = dao; 
     }
 
-    public abstract void execute();
+    public abstract boolean execute();
 
 
 
