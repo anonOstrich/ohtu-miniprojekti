@@ -6,11 +6,11 @@ import app.domain.Tag;
 import app.utilities.Utilities;
 import bookmarks.OtherBookmark;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import org.hibernate.Criteria;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -119,8 +119,6 @@ public class BookMarkDAO {
         session.close();
     }
 
-
-
     /**
      * Used to search a specific field in the database using a search term. The
      * term doesn't need to be an exact match, since it uses the like-operator.
@@ -154,14 +152,14 @@ public class BookMarkDAO {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Bookmark bookmark;
+        bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
+        String ret = "";
         try {
-            bookmark = session.load(Bookmark.class, id);
+            ret += bookmark.toString();
         } catch (Exception e) {
             System.out.println("Bookmark not found");
             return "";
         }
-        String ret = "";
-        ret += bookmark.toString();
         session.close();
         return ret;
     }
@@ -180,13 +178,13 @@ public class BookMarkDAO {
         session.beginTransaction();
         Bookmark bookmark;
         try {
-            bookmark = session.load(Bookmark.class, id);
+            bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
         } catch (Exception e) {
             System.out.println("Bookmark not found");
             return false;
         }
-        if (bookmark.getClass().equals(OtherBookmark.class)) {
-
+        if (bookmark == null) {
+            return false;
         }
         switch (field) {
             case ("author"):
@@ -211,7 +209,7 @@ public class BookMarkDAO {
         session.close();
         return true;
     }
-    
+
     public void updateInformation(Session session, Bookmark bookmark) {
         session.evict(bookmark);
         session.update(bookmark);
@@ -247,18 +245,17 @@ public class BookMarkDAO {
     public TagDAO getTagDAO() {
         return tagDAO;
     }
-    
+
     private boolean databaseIsEmpty() {
         return getBookMarksOnDatabase().isEmpty();
     }
 
     private void initializeDatabase() {
         String objects = "";
-        
-        
+
         // classloader and resource as stream are a cumbersome solution, 
         // but the only one I managed to make work in every situation (also running as a .jar)
-        ClassLoader cl = getClass().getClassLoader();     
+        ClassLoader cl = getClass().getClassLoader();
         try (Scanner s = new Scanner(cl.getResourceAsStream("initial.sql"))) {
             while (s.hasNext()) {
                 objects += s.nextLine();

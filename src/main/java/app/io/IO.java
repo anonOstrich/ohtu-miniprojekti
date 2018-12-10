@@ -9,8 +9,6 @@ public interface IO {
     void print(String toPrint);
 
     String nextLine();
-
-    int nextInt();
     
     void colorPrint(String toPrint, Ansi.Color color);
 

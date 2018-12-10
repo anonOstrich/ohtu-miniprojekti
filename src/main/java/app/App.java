@@ -43,31 +43,40 @@ public class App {
                 }
             } else if (command.equals("2") || command.equals("list")) {
                 String method = ui.askForListingMethod();
-                if(method.equals("LT")) {
+                if (method.equals("LT")) {
                     ui.presentTags(dao.getTagDAO().getTagsOnDatabase());
-                } else ui.printBookmarkList(dao.getBookmarksInOrder(method));
+                } else {
+                    ui.printBookmarkList(dao.getBookmarksInOrder(method));
+                }
             } else if (command.equals("3") || command.equals("search")) {
                 String searchfield = ui.askForField();
                 String search;
-                if(searchfield.equals("tag")) {
+                if (searchfield.equals("tag")) {
                     List<Tag> tags = dao.getTagDAO().getTagsOnDatabase();
                     ui.listTags(tags);
                     search = ui.askForTag();
                     boolean found = false;
                     for (Tag tag : tags) {
-                        if(tag.getName().equals(search)) {
+                        if (tag.getName().equals(search)) {
                             ui.printBookmarkList(new ArrayList(tag.getBookmarks()));
                             found = true;
                             break;
                         }
                     }
-                    if(!found) ui.printTagsNotFound();
+                    if (!found) {
+                        ui.printTagsNotFound();
+                    }
                 } else {
                     search = ui.askForSearch();
                     ui.printBookmarkList(dao.searchField(searchfield, search));
                 }
             } else if (command.equals("4") || command.equals("edit")) {
-                Long editID = ui.askForBookmarkToEdit(dao.getBookMarksOnDatabase());
+                List<Bookmark> bookmarks = dao.getBookMarksOnDatabase();
+                Long editID = ui.askForBookmarkToEdit(bookmarks);
+                if (editID == 0 || editID > bookmarks.size()) {
+                    io.println("Not a valid ID");
+                    continue;
+                }
                 String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
                 List<Tag> tagList = null;
                 io.println("\nOld values: ");
@@ -83,7 +92,12 @@ public class App {
                 }
 
             } else if (command.equals("5") || command.equals("delete")) {
-                Long bookmark_id = ui.askForBookmarkToDelete(dao.getBookMarksOnDatabase());
+                List<Bookmark> bookmarks = dao.getBookMarksOnDatabase();
+                Long bookmark_id = ui.askForBookmarkToDelete(bookmarks);
+                if (bookmark_id == 0 || bookmark_id > bookmarks.size()) {
+                    io.println("Not a valid ID");
+                    continue;
+                }
                 if (bookmark_id != null) {
                     if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
                         ui.viewBookmarkDeletedMessage();
@@ -105,7 +119,7 @@ public class App {
         this.dao.close();
     }
 
-    public static void main(String[] args) {    
+    public static void main(String[] args) {
         App app = new App(new ConsoleIO());
         app.run();
         app.close();
