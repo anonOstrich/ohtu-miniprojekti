@@ -2,13 +2,16 @@
 package app.domain.command;
 
 import app.io.IO;
+import app.ui.TextUI;
 
 
 public class ListCommand extends Command {
-
-    public ListCommand(IO io) {
-        super(io);
+    
+    public ListCommand(TextUI ui){
+        super(ui);
     }
+
+
 
     @Override
     public void execute() {

@@ -1,12 +1,14 @@
 package app.domain.command;
 
 import app.io.IO;
+import app.ui.TextUI;
 
 public class SearchCommand extends Command {
 
-    public SearchCommand(IO io) {
-        super(io);
+    public SearchCommand(TextUI ui) {
+        super(ui);
     }
+
 
     @Override
     public void execute() {

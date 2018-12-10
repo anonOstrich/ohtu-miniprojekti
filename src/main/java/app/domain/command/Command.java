@@ -1,35 +1,36 @@
 package app.domain.command;
 
 import app.io.IO;
+import app.ui.TextUI;
 
 public abstract class Command {
 
-    protected IO io;
+    protected TextUI ui;
 
-    public Command(IO io) {
-        this.io = io;
+    public Command(TextUI ui) {
+        this.ui = ui;
     }
 
     public abstract void execute();
 
-    public static Command newCommand(IO io) {
-        return new NewCommand(io);
+    public static Command newCommand(TextUI ui) {
+        return new NewCommand(ui);
     }
     
-    public static Command listCommand(IO io){
-        return new ListCommand(io);
+    public static Command listCommand(TextUI ui){
+        return new ListCommand(ui);
     }
     
-    public static Command searchCommand(IO io){
-        return new SearchCommand(io);
+    public static Command searchCommand(TextUI ui){
+        return new SearchCommand(ui);
     }
     
-    public static Command deleteCommand(IO io){
-        return new DeleteCommand(io);
+    public static Command deleteCommand(TextUI ui){
+        return new DeleteCommand(ui);
     }
     
-    public static Command editCommand(IO io){
-        return new EditCommand(io);
+    public static Command editCommand(TextUI ui){
+        return new EditCommand(ui);
     }
 
 }

@@ -32,23 +32,23 @@ public class App {
         this.commandsByNames = new HashMap(); 
         this.commandsByNumbers = new HashMap(); 
         
-        Command newC = Command.newCommand(io); 
+        Command newC = Command.newCommand(ui); 
         commandsByNames.put("new", newC); 
         commandsByNumbers.put("1", newC);
         
-        Command listC = Command.listCommand(io);
+        Command listC = Command.listCommand(ui);
         commandsByNames.put("list", listC);
         commandsByNumbers.put("2", listC);
         
-        Command searchC = Command.searchCommand(io);
+        Command searchC = Command.searchCommand(ui);
         commandsByNames.put("search", searchC);
         commandsByNumbers.put("3", searchC);
         
-        Command editC = Command.editCommand(io);
+        Command editC = Command.editCommand(ui);
         commandsByNames.put("edit", editC);
         commandsByNumbers.put("4", editC);
         
-        Command deleteC = Command.deleteCommand(io);
+        Command deleteC = Command.deleteCommand(ui);
         commandsByNames.put("delete", deleteC);
         commandsByNumbers.put("5", deleteC);
     }

@@ -1,12 +1,15 @@
 package app.domain.command;
 
 import app.io.IO;
+import app.ui.TextUI;
 
 public class DeleteCommand extends Command{
 
-    public DeleteCommand(IO io) {
-        super(io);
+    public DeleteCommand(TextUI ui) {
+        super(ui);
     }
+
+
 
     @Override
     public void execute() {
