@@ -24,12 +24,12 @@ public class Validator {
     }
     
     /**
-     * Check if the given url is valid. The url must start with "www." or "http://" and must end with 3-6 numbers
+     * Check if the given url is valid. The url must start with "www." or "http://" and must end either with domain name or filename. 
      * @param url
      * @return
      */
     public static boolean validUrl(String url) {
-        if(!url.matches("^www\\.[a-z0-9]+\\.[a-z]{2,6}$|^http://\\.[a-z0-9]+\\.[a-z]{2,6}$")){
+        if(!url.matches("^(http://)?www\\.[a-z0-9]+\\.[a-z]{2,6}(\\/[a-z0-9]*)?$")){
             return false;
         }
         return true;
