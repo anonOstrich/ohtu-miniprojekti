@@ -141,11 +141,12 @@ public abstract class Bookmark {
 
     /**
      * Prints all the fields of the bookmark
-     * 
-     * <p>If the IO class is a stub for testing, the toString return value
-     * is printed as such. Otherwise the value of the title field is printed in cyan, 
-     * and everything else in the default color</p>
-     * 
+     *
+     * <p>
+     * If the IO class is a stub for testing, the toString return value is
+     * printed as such. Otherwise the value of the title field is printed in
+     * cyan, and everything else in the default color</p>
+     *
      * @param io IO object used for printing
      */
     public void printInfo(IO io) {
@@ -153,9 +154,9 @@ public abstract class Bookmark {
 
         if (io.getClass() == StubIO.class) {
             io.println(info);
-            return; 
+            return;
         }
-        
+
         int indexOfTitleLabel = info.indexOf(" Title:");
         indexOfTitleLabel += 7;
         int indexOfTagsLabel = info.indexOf(" Tags:");
@@ -166,13 +167,14 @@ public abstract class Bookmark {
 
     /**
      * Prints the essential fields and their values of this bookmark
-     * 
-     * <p>Prints the summary of the bookmark. Everything will be printed with
-     * the basic print method of the IO object, if that object is an instance of StubIO class; 
-     * in such a case the color of the ouput is not needed. In other cases
-     * the value of the title field will be printed in cyan, and everything else 
-     * in the default color.</p>
-     * 
+     *
+     * <p>
+     * Prints the summary of the bookmark. Everything will be printed with the
+     * basic print method of the IO object, if that object is an instance of
+     * StubIO class; in such a case the color of the ouput is not needed. In
+     * other cases the value of the title field will be printed in cyan, and
+     * everything else in the default color.</p>
+     *
      * @param io IO object used for printing
      */
     public void printShortInfo(IO io) {

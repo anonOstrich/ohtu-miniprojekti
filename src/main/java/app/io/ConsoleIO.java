@@ -33,11 +33,6 @@ public class ConsoleIO implements IO {
     }
 
     @Override
-    public int nextInt() {
-        return scanner.nextInt();
-    }
-
-    @Override
     public void print(String toPrint) {
         System.out.print(toPrint);
     }
