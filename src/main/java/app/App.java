@@ -2,15 +2,20 @@ package app;
 
 import app.dao.BookMarkDAO;
 import app.domain.Tag;
+import app.domain.command.Command;
 import app.io.ConsoleIO;
 import app.io.IO;
 import app.ui.TextUI;
 import bookmarks.Bookmark;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import java.util.List;
+import java.util.Map;
 
 public class App {
+    private Map<String, Command> commandsByNames; 
+    private Map<String, Command> commandsByNumbers; 
 
     private final TextUI ui;
     private IO io;
@@ -24,6 +29,28 @@ public class App {
         this.io = io;
         this.ui = new TextUI(io);
         this.dao = dao;
+        this.commandsByNames = new HashMap(); 
+        this.commandsByNumbers = new HashMap(); 
+        
+        Command newC = Command.newCommand(io); 
+        commandsByNames.put("new", newC); 
+        commandsByNumbers.put("1", newC);
+        
+        Command listC = Command.listCommand(io);
+        commandsByNames.put("list", listC);
+        commandsByNumbers.put("2", listC);
+        
+        Command searchC = Command.searchCommand(io);
+        commandsByNames.put("search", searchC);
+        commandsByNumbers.put("3", searchC);
+        
+        Command editC = Command.editCommand(io);
+        commandsByNames.put("edit", editC);
+        commandsByNumbers.put("4", editC);
+        
+        Command deleteC = Command.deleteCommand(io);
+        commandsByNames.put("delete", deleteC);
+        commandsByNumbers.put("5", deleteC);
     }
 
     public void run() {
