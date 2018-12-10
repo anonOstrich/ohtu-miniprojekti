@@ -6,6 +6,7 @@ import app.io.ConsoleIO;
 import app.io.IO;
 import app.ui.TextUI;
 import bookmarks.Bookmark;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -42,11 +43,29 @@ public class App {
                 }
             } else if (command.equals("2") || command.equals("list")) {
                 String method = ui.askForListingMethod();
-                ui.printBookmarkList(dao.getBookmarksInOrder(method));
+                if(method.equals("LT")) {
+                    ui.presentTags(dao.getTagDAO().getTagsOnDatabase());
+                } else ui.printBookmarkList(dao.getBookmarksInOrder(method));
             } else if (command.equals("3") || command.equals("search")) {
                 String searchfield = ui.askForField();
-                String search = ui.askForSearch();
-                ui.printBookmarkList(dao.searchField(searchfield, search));
+                String search;
+                if(searchfield.equals("tag")) {
+                    List<Tag> tags = dao.getTagDAO().getTagsOnDatabase();
+                    ui.listTags(tags);
+                    search = ui.askForTag();
+                    boolean found = false;
+                    for (Tag tag : tags) {
+                        if(tag.getName().equals(search)) {
+                            ui.printBookmarkList(new ArrayList(tag.getBookmarks()));
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found) ui.printTagsNotFound();
+                } else {
+                    search = ui.askForSearch();
+                    ui.printBookmarkList(dao.searchField(searchfield, search));
+                }
             } else if (command.equals("4") || command.equals("edit")) {
                 Long editID = ui.askForBookmarkToEdit(dao.getBookMarksOnDatabase());
                 String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));

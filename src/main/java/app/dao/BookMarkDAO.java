@@ -244,6 +244,10 @@ public class BookMarkDAO {
         return false;
     }
 
+    public TagDAO getTagDAO() {
+        return tagDAO;
+    }
+    
     private boolean databaseIsEmpty() {
         return getBookMarksOnDatabase().isEmpty();
     }

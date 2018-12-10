@@ -4,10 +4,15 @@ import bookmarks.Bookmark;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class Tag {
@@ -16,8 +21,11 @@ public class Tag {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    
 
-    @ManyToMany(mappedBy = "tags")
+    
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private Set<Bookmark> bookmarks;
 
     @Column(name = "name", unique = true)
@@ -53,8 +61,8 @@ public class Tag {
         this.id = id;
     }
     
-    
 
+    
     @Override
     public String toString() {
         return this.name;

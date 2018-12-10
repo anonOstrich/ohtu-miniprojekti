@@ -38,9 +38,9 @@ public class TextUI {
         io.redPrint("Add");
         io.print(" a new bookmark \n2. ");
         io.redPrint("List");
-        io.print(" all existing bookmarks\n3. ");
+        io.print(" all existing bookmarks, or tags\n3. ");
         io.redPrint("Search");
-        io.print(" a specific bookmark\n4. ");
+        io.print(" for bookmarks\n4. ");
         io.redPrint("Edit");
         io.print(" a bookmark\n5. ");
         io.redPrint("Delete");
@@ -52,13 +52,15 @@ public class TextUI {
 
     public String askForField() {
         io.println("Which field would you like to search?");
-        io.println("Give field (T = Title) (D = Description)");
+        io.println("Give field (T = Title) (D = Description) (TA = Tag)");
         String command = io.nextLine();
         switch (command) {
             case ("T"):
                 return "title";
             case ("D"):
                 return "description";
+            case ("TA"):
+                return "tag";
             default:
                 return "";
         }
@@ -97,6 +99,7 @@ public class TextUI {
     public String askForListingMethod() {
         io.println("Choose listing method:");
         io.println("(T = Title)(CD = Creation time Descending)(CA = Creation time Ascending)");
+        io.println("(LT = List Tags)");
         return io.nextLine();
     }
 
@@ -109,6 +112,44 @@ public class TextUI {
             bmark.printInfo(io);
             io.println("==================================================");
         }
+    }
+    
+    public void presentTags(List<Tag> tags) {
+        io.println("");
+        io.println("Tags:");
+        io.println("----------------------------------------------");
+        if (tags.isEmpty()) {
+            io.println("No tags found.");
+        }
+        for (int i = 0; i < tags.size(); i++) {
+            Tag tag = tags.get(i);
+            Set<Bookmark> bmarks = tag.getBookmarks();
+            io.println("name: " + tag + "\n" + "bookmarks tagged:");
+            for (Bookmark bmark : bmarks) {
+                io.println(bmark.shortPrint());
+            }
+            io.println("Total amount of bookmarks tagged: " + bmarks.size());
+            io.println("==============================================");
+        }
+    }
+    
+    public void listTags(List<Tag> tags) {
+        io.println("");
+        io.println("Tags:");
+        io.println("");
+        for (Tag tag : tags) {
+            io.println(tag.toString());
+        }
+    }
+    
+    public String askForTag() {
+        io.println("");
+        io.println("Enter name of the tag to list bookmarks associated with it:");
+        return io.nextLine();
+    }
+    
+    public void printTagsNotFound() {
+        io.println("No tags with that title were found.");
     }
 
     private Bookmark askForOtherBookmarkInfo() {
