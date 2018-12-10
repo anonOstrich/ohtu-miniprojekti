@@ -47,7 +47,7 @@ public class Stepdefs {
         inputLines.add("DeleteCast");
         inputLines.add("deleted");
         inputLines.add("Will be deleted.");
-        
+
         inputLines.add("1");
         inputLines.add("BG");
         inputLines.add("www.polarnews.com");
@@ -73,15 +73,16 @@ public class Stepdefs {
 
     @When("input number {int} is entered")
     public void input_number_is_entered(int input) throws Throwable {
-        inputLines.add(""+input);
+        inputLines.add("" + input);
     }
 
     @When("app is created")
     public void app_is_created() throws Throwable {
         inputLines.add("0");
         io = new StubIO(inputLines);
+        TextUI ui = new TextUI(io);
         dao = new BookMarkDAO(Utilities.TEST_DATABASE);
-        app = new App(io, dao);
+        app = new App(ui, dao);
         app.run();
     }
 
@@ -116,14 +117,15 @@ public class Stepdefs {
         assertTrue(!found);
         close();
     }
-    
+
     @Then("system response will contain {string} before {string}")
     public void system_response_will_contain_1st_before_2nd(String first, String second) {
         boolean found1 = false;
         boolean found2 = false;
         for (String print : io.getPrints()) {
-            if(!found1 && print.contains(first)) found1 = true;
-            else if(print.contains(second)) {
+            if (!found1 && print.contains(first)) {
+                found1 = true;
+            } else if (print.contains(second)) {
                 found2 = true;
                 break;
             }
