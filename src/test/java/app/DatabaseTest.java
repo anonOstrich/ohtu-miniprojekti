@@ -13,7 +13,6 @@ import org.junit.*;
 import java.util.*;
 import javax.transaction.Transactional;
 
-
 @Transactional
 public class DatabaseTest {
 
@@ -43,10 +42,10 @@ public class DatabaseTest {
         dao.saveBookmarkToDatabase(new BookBookmark());
         assertNotNull(dao.getBookMarksOnDatabase());
     }
-    
-    @Transactional 
+
+    @Transactional
     @Test
-    public void otherBookmarksDontCauseCrashing(){
+    public void otherBookmarksDontCauseCrashing() {
         dao.saveBookmarkToDatabase(new OtherBookmark());
         assertNotNull(dao.getBookMarksOnDatabase());
     }
@@ -54,7 +53,7 @@ public class DatabaseTest {
     @Transactional
     @Test
     public void searchMethodWorks() {
-        dao.saveBookmarkToDatabase(new BookBookmark("123", "simeon", "book",  new ArrayList<Tag>(),  ""));
+        dao.saveBookmarkToDatabase(new BookBookmark("123", "simeon", "book", new ArrayList<Tag>(), ""));
         assertNotNull(dao.searchField("author", "simeon"));
     }
 
@@ -65,8 +64,19 @@ public class DatabaseTest {
         long bookmarkID = dao.getBookMarksOnDatabase().get(dao.getBookMarksOnDatabase().size() - 1).getId();
         dao.editEntry(bookmarkID, "author", "testAuthor", new ArrayList<Tag>());
         dao.editEntry(bookmarkID, "title", "testTitle", new ArrayList<Tag>());
+        dao.editEntry(bookmarkID, "description", "testDescription", new ArrayList<Tag>());
+        dao.editEntry(bookmarkID, "title", "testTitle", new ArrayList<Tag>());
+        ArrayList<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("horror"));
+        dao.editEntry(bookmarkID, "tags", "", tags);
         assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testAuthor"));
         assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testTitle"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testDescription"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("horror"));
+        dao.saveBookmarkToDatabase(new BlogBookmark());
+        bookmarkID = dao.getBookMarksOnDatabase().get(dao.getBookMarksOnDatabase().size() - 1).getId();
+        dao.editEntry(bookmarkID, "url", "www.puup.com", tags);
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("www.puup.com"));
     }
 
     @Transactional
@@ -99,8 +109,16 @@ public class DatabaseTest {
     public void deleteRemovesNothingWithWrongId() {
         Bookmark bm = new BookBookmark();
         dao.saveBookmarkToDatabase(bm);
-        long false_id = 666;  
+        long false_id = 666;
         dao.deleteBookmarkFromDatabase(false_id);
         assertEquals(1, dao.getBookMarksOnDatabase().size());
     }
+    @Transactional
+    @Test
+    public void initializationWorks(){
+        BookMarkDAO dao=new BookMarkDAO("hibernate.cfg.xml");
+        assertNotNull(dao);
+        dao.close();
+    } 
+
 }

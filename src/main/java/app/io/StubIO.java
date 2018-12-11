@@ -44,23 +44,6 @@ public class StubIO implements IO {
         return "";
     }
 
-    // is the nextInt() actually used somewhere?
-    @Override
-    public int nextInt() {
-        String line = nextLine();
-        int no;
-        try {
-            no = Integer.parseInt(line);
-        } catch (NumberFormatException e) {
-            // System.out.println("<0");
-            // is it good to return 0 in case of an exception 
-            // or would it be better to throw an exception like ConsoleIO would do?
-            return 0;
-        }
-        // System.out.println("<"+no);
-        return no;
-    }
-
     @Override
     public void colorPrint(String toPrint, Ansi.Color color) {
         // if we don't test colors, there is no need to print them differently 

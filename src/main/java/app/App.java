@@ -30,10 +30,12 @@ public class App {
         Command command;
         //TODO: hide this to an other class
 
+
         while (run) {
             input = ui.getMenuCommand();
             command = commandManager.getCommandByInput(input);
             run = command.execute();
+
         }
 
     }
@@ -43,7 +45,9 @@ public class App {
     }
 
     public static void main(String[] args) {
+
         App app = new App(new TextUI(new ConsoleIO()));
+
         app.run();
         app.close();
     }
