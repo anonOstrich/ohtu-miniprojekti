@@ -434,7 +434,13 @@ public class TextUI {
         return ISBN;
     }
 
-    public void temporaryMethod(String mjono) {
+    /**
+     * Added to remove dependencies in commands
+     * 
+     * COULD PROBABLY BE GENERALIZED / ACCOMPLISHED BY SOME OTHER METHOD
+     * 
+     */
+    public void displayOldValues(String mjono) {
         io.println("\nOld values: ");
         io.println(mjono);
     }

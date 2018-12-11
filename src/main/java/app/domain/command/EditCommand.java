@@ -20,7 +20,7 @@ public class EditCommand extends Command {
         String bm_info = dao.getSingleBookmarkInfo(editID);
         
         
-        ui.temporaryMethod(bm_info);
+        ui.displayOldValues(bm_info);
         if (editfield.equals("tags")) {
             tagList = ui.askForTags();
         } else {
