@@ -36,6 +36,7 @@ public class App {
             command = commandManager.getCommandByInput(input);
             run = command.execute();
 
+
         }
 
     }

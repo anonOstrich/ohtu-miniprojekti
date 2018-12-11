@@ -3,6 +3,7 @@ package app.domain.command;
 import app.dao.BookMarkDAO;
 import app.domain.Tag;
 import app.ui.TextUI;
+import bookmarks.Bookmark;
 import java.util.List;
 
 public class EditCommand extends Command {
@@ -13,14 +14,17 @@ public class EditCommand extends Command {
 
     @Override
     public boolean execute() {
-        String newEntry = ""; 
-        Long editID = ui.askForBookmarkToEdit(dao.getBookMarksOnDatabase());
+        String newEntry = "";
+        List<Bookmark> bookmarks = dao.getBookMarksOnDatabase();
+        Long editID = ui.askForBookmarkToEdit(bookmarks);
         String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
+        if (editfield.isEmpty()) {
+            ui.displayMessage("Not a valid ID");
+            return true;
+        }
         List<Tag> tagList = null;
-        String bm_info = dao.getSingleBookmarkInfo(editID);
-        
-        
-        ui.displayOldValues(bm_info);
+        ui.displayMessage("\nOld values: ");
+        ui.displayMessage(dao.getSingleBookmarkInfo(editID));
         if (editfield.equals("tags")) {
             tagList = ui.askForTags();
         } else {
@@ -30,7 +34,7 @@ public class EditCommand extends Command {
         if (dao.editEntry(editID, editfield, newEntry, tagList)) {
             ui.viewBookmarkEditedMessage();
         }
-        return true; 
+        return true;
     }
 
 }

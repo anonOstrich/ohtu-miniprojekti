@@ -325,6 +325,9 @@ public class TextUI {
      * @return
      */
     public String askForEditField(String bookmark) {
+        if(bookmark.isEmpty()){
+            return "";
+        }
         askUserForEditFieldMessage(bookmark);
 
         while (true) {
@@ -351,6 +354,9 @@ public class TextUI {
     }
 
     private void askUserForEditFieldMessage(String bookmark) {
+        if(bookmark.isEmpty()){
+            return;
+        }
         String bookmarkType = bookmark.split(" ")[3].trim();
         String ask = bookmarkType + "\n\nSelect field to edit:";
 
@@ -433,15 +439,8 @@ public class TextUI {
         }
         return ISBN;
     }
-
-    /**
-     * Added to remove dependencies in commands
-     * 
-     * COULD PROBABLY BE GENERALIZED / ACCOMPLISHED BY SOME OTHER METHOD
-     * 
-     */
-    public void displayOldValues(String mjono) {
-        io.println("\nOld values: ");
+   
+    public void displayMessage(String mjono){
         io.println(mjono);
     }
 }
