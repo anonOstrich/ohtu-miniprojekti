@@ -73,11 +73,11 @@ public class App {
             } else if (command.equals("4") || command.equals("edit")) {
                 List<Bookmark> bookmarks = dao.getBookMarksOnDatabase();
                 Long editID = ui.askForBookmarkToEdit(bookmarks);
-                if (editID == 0 || editID > bookmarks.size()) {
+                String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
+                if(editfield.isEmpty()){
                     io.println("Not a valid ID");
                     continue;
                 }
-                String editfield = ui.askForEditField(dao.getSingleBookmarkInfo(editID));
                 List<Tag> tagList = null;
                 io.println("\nOld values: ");
                 io.println(dao.getSingleBookmarkInfo(editID));
@@ -94,10 +94,6 @@ public class App {
             } else if (command.equals("5") || command.equals("delete")) {
                 List<Bookmark> bookmarks = dao.getBookMarksOnDatabase();
                 Long bookmark_id = ui.askForBookmarkToDelete(bookmarks);
-                if (bookmark_id == 0 || bookmark_id > bookmarks.size()) {
-                    io.println("Not a valid ID");
-                    continue;
-                }
                 if (bookmark_id != null) {
                     if (dao.deleteBookmarkFromDatabase(bookmark_id)) {
                         ui.viewBookmarkDeletedMessage();
