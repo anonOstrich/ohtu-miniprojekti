@@ -5,12 +5,8 @@ import app.domain.command.Command;
 import app.domain.command.CommandManager;
 import app.io.ConsoleIO;
 import app.ui.TextUI;
-import java.util.Map;
 
 public class App {
-
-    private Map<String, Command> commandsByNames;
-    private Map<String, Command> commandsByNumbers;
 
     private final TextUI ui;
     private BookMarkDAO dao;
@@ -31,20 +27,12 @@ public class App {
         ui.printWelcomeMessage();
         boolean run = true;
         String input;
-        int safety = 0;
         Command command;
         //TODO: hide this to an other class
 
         while (run) {
             input = ui.getMenuCommand();
             command = commandManager.getCommandByInput(input);
-            if (command == null) {
-                ui.printUnrecognizedOption();
-                if (safety++ > 100) {
-                    run = false;
-                }
-                continue;
-            }
             run = command.execute();
         }
 

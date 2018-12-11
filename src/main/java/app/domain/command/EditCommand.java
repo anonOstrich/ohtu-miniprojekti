@@ -2,9 +2,7 @@ package app.domain.command;
 
 import app.dao.BookMarkDAO;
 import app.domain.Tag;
-import app.io.IO;
 import app.ui.TextUI;
-import bookmarks.Bookmark;
 import java.util.List;
 
 public class EditCommand extends Command {
