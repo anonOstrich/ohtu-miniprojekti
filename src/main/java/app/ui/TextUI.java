@@ -308,6 +308,9 @@ public class TextUI {
      * @return
      */
     public String askForEditField(String bookmark) {
+        if(bookmark.isEmpty()){
+            return "";
+        }
         askUserForEditFieldMessage(bookmark);
 
         while (true) {
@@ -334,6 +337,9 @@ public class TextUI {
     }
 
     private void askUserForEditFieldMessage(String bookmark) {
+        if(bookmark.isEmpty()){
+            return;
+        }
         String bookmarkType = bookmark.split(" ")[3].trim();
         String ask = bookmarkType + "\n\nSelect field to edit:";
 

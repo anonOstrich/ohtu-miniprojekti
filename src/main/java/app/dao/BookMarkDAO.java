@@ -158,6 +158,7 @@ public class BookMarkDAO {
             ret += bookmark.toString();
         } catch (Exception e) {
             System.out.println("Bookmark not found");
+            session.close();
             return "";
         }
         session.close();
