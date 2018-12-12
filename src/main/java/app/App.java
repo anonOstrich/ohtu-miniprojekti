@@ -34,7 +34,7 @@ public class App {
             command = commandManager.getCommandByInput(input);
             run = command.execute();
         }
-
+        close();
     }
 
     public void close() {
@@ -42,10 +42,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-
         App app = new App(new TextUI(new ConsoleIO()));
-
         app.run();
-        app.close();
     }
 }

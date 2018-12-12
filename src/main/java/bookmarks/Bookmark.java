@@ -132,6 +132,9 @@ public abstract class Bookmark {
     public void setUrl(String url) {
     }
 
+    public void setISBN(String isbn) {
+    }
+
     @Override
     public String toString() {
         String result
@@ -150,44 +153,46 @@ public abstract class Bookmark {
     public Ansi.Color colorOfType() {
         return Ansi.Color.WHITE;
     }
-    
+
     public void printType(IO io) {
         io.boldColorPrint(type(), colorOfType());
     }
 
-
     /**
      * Prints tags
      *
-     * <p>Tags are printed with different background-colors based on hashes
+     * <p>
+     * Tags are printed with different background-colors based on hashes
      * </p>
      *
      * @param io IO object used for printing
      */
-    private void printTags(IO io){
-        for (Tag tag : tags){
+    private void printTags(IO io) {
+        for (Tag tag : tags) {
             tag.print(io);
             io.print(" ");
         }
     }
 
-    protected void printID(IO io){
+    protected void printID(IO io) {
         io.boldPrint("ID: ");
         io.boldRedPrint(id.toString());
         io.println("");
     }
+
     /**
      * Prints all the name of a field
      *
-     * <p></p>
+     * <p>
+     * </p>
      *
      * @param fieldName Name of the field
      * @param io IO object used for printing
      */
-    protected void printFieldName(String fieldName, IO io){
-        fieldName=" "+fieldName+":";
-        while (fieldName.length() < 15){
-            fieldName+=" ";
+    protected void printFieldName(String fieldName, IO io) {
+        fieldName = " " + fieldName + ":";
+        while (fieldName.length() < 15) {
+            fieldName += " ";
         }
         io.boldPrint(fieldName);
     }
@@ -202,7 +207,7 @@ public abstract class Bookmark {
      *
      * @param io IO object used for printing
      */
-    public void printInfo(IO io){
+    public void printInfo(IO io) {
         printFieldName("Title", io);
         io.cyanPrint(title);
         io.println("");
@@ -241,7 +246,7 @@ public abstract class Bookmark {
         printType(io);
         io.print("  ");
         io.boldPrint("Title: ");
-        io.cyanPrint(title+"  ");
+        io.cyanPrint(title + "  ");
     }
 
     public String shortPrint() {

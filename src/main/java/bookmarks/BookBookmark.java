@@ -43,6 +43,8 @@ public class BookBookmark extends Bookmark {
     public String getISBN(){
         return ISBN;
     }
+    
+    @Override
     public void setISBN(String ISBN){
         this.ISBN=ISBN;
     }

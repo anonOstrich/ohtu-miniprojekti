@@ -9,6 +9,7 @@ import bookmarks.BookBookmark;
 import bookmarks.BlogBookmark;
 import bookmarks.OtherBookmark;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -18,7 +19,7 @@ public class TextUI {
 
     private final IO io;
     private final String defaultSuccessMessage = "Your bookmark has been read!";
-    private final HashMap<String, String> selectedEditFieldMap = new HashMap<>();
+    private final HashMap<String, String> selectedFieldMap = new HashMap<>();
     private final HashMap<String, String> bookmarkTypeToAskEditFieldPrintMap = new HashMap<>();
 
     /**
@@ -32,40 +33,40 @@ public class TextUI {
         initBookmarkTypeToAskEditFieldPrintMap();
     }
 
-    public IO getIO(){
+    public IO getIO() {
         return io;
     }
 
-    public void displayErrorMessage(String msg){
+    public void displayErrorMessage(String msg) {
         io.boldColorPrint(msg, Ansi.Color.WHITE, Ansi.Color.RED);
         io.println("");
     }
 
-    public void displaySuccessMessage(String msg){
+    public void displaySuccessMessage(String msg) {
         io.boldColorPrint(msg, Ansi.Color.GREEN);
         io.println("");
     }
 
-    public void displayMessage(String msg){
+    public void displayMessage(String msg) {
         io.println(msg);
     }
 
-    public void displayInstructionMessage(String msg){
+    public void displayInstructionMessage(String msg) {
         io.boldColorPrint(msg, Ansi.Color.YELLOW);
         io.println("");
     }
 
-    public void printFieldName(String msg){
+    public void printFieldName(String msg) {
         io.boldColorPrint(msg, Ansi.Color.WHITE);
         io.println("");
     }
 
-    public void printHR1(){
+    public void printHR1() {
         //io.println("==================================================");
         io.println("\n");
     }
 
-    public void printHR2(){
+    public void printHR2() {
         //io.println("--------------------------------------------------");
         io.println("");
     }
@@ -93,7 +94,6 @@ public class TextUI {
         displayErrorMessage("Unrecognized option");
     }
 
-
     /**
      * Prints the available menu options and prompts the user to select one.
      *
@@ -102,6 +102,7 @@ public class TextUI {
     public String getMenuCommand() {
         displayInstructionMessage("\nSelect one of the following options");
         io.print("1. ");
+        
         io.boldRedPrint("Add");
         io.print(" a new bookmark \n2. ");
         io.boldRedPrint("List");
@@ -120,18 +121,29 @@ public class TextUI {
     /**
      * Asks for the field that user wants to edit.
      *
-     * @return a valid choise if user selection is valid, empty string
+     * @return a valid choice if user selection is valid, empty string
      * otherwise.
      */
     public String askForField() {
         displayInstructionMessage("Which field would you like to search?");
-        printFieldName("Give field (T = Title) (D = Description) (TA = Tag)");
+        io.println("Give type to be searched: ");
+        for (Entry<String, String> e : this.selectedFieldMap.entrySet()) {
+            io.println(e.getKey() + " = " + e.getValue());
+        }
         String command = io.nextLine();
         switch (command) {
+            case ("A"):
+                return "author";
             case ("T"):
                 return "title";
             case ("D"):
                 return "description";
+            case ("U"):
+                return "url";
+            case ("I"):
+                return "ISBN";
+            case ("Y"):
+                return "all";
             case ("TA"):
                 return "tag";
             default:
@@ -369,31 +381,33 @@ public class TextUI {
      * @return
      */
     public String askForEditField(Bookmark bookmark) {
-        if (bookmark == null){
+        if (bookmark == null) {
             return "";
         }
         bookmark.printInfo(io);
         askUserForEditFieldMessage(bookmark);
 
         while (true) {
-            String output = selectedEditFieldMap.get(io.nextLine());
+            String output = selectedFieldMap.get(io.nextLine());
 
-            if (output != null) {
+            if (output != null && !output.equals("all")) {
                 return output;
             }
         }
     }
 
     private void initSelectedEditFieldMap() {
-        selectedEditFieldMap.put("A", "author");
-        selectedEditFieldMap.put("T", "title");
-        selectedEditFieldMap.put("U", "url");
-        selectedEditFieldMap.put("D", "description");
-        selectedEditFieldMap.put("X", "tags");
+        selectedFieldMap.put("A", "author");
+        selectedFieldMap.put("T", "title");
+        selectedFieldMap.put("U", "url");
+        selectedFieldMap.put("I", "ISBN");
+        selectedFieldMap.put("D", "description");
+        selectedFieldMap.put("X", "tags");
+        selectedFieldMap.put("Y", "all");
     }
 
     private void initBookmarkTypeToAskEditFieldPrintMap() {
-        bookmarkTypeToAskEditFieldPrintMap.put("Book", "A = Author\nT = title\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Book", "A = Author\nT = title\nD = description\nI = ISBN\nX = tags");
         bookmarkTypeToAskEditFieldPrintMap.put("Blogpost", "T = title\nU = url\nD = description\nX = tags");
         bookmarkTypeToAskEditFieldPrintMap.put("Other", "T = title\nU = url\nD = description\nX = tags");
     }
@@ -404,7 +418,6 @@ public class TextUI {
         io.println(bookmarkTypeToAskEditFieldPrintMap.get(bookmarkType));
     }
 
-    
     /**
      * Asks the user for a new entry when the user is in edit state.
      *

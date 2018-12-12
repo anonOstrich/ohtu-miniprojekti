@@ -14,6 +14,7 @@ import org.fusesource.jansi.Ansi;
 @Entity
 @Table(name = "BlogBookmark")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public class BlogBookmark extends Bookmark {
 
     private String url;

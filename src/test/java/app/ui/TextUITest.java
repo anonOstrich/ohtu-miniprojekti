@@ -151,5 +151,6 @@ public class TextUITest {
         assertEquals("tags", ui.askForEditField(bookBookmark));
         assertEquals("", ui.askForEditField(null));
         assertEquals("author", ui.askForEditField(bookBookmark));
+        assertEquals("ISBN", ui.askForEditField(bookBookmark));
     }
 }
