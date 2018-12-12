@@ -11,6 +11,8 @@ import cucumber.api.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class Stepdefs {
 
@@ -131,6 +133,15 @@ public class Stepdefs {
             }
         }
         assertTrue(found1 && found2);
+        close();
+    }
+
+    @Then("system response will contain {string} -> {string}")
+    public void system_response_will_contain_1st_and_2st_separated_by_whitespace_only(String first, String second) {
+        String lines = String.join("\n", io.getPrints());
+        String patternStr = ".*"+first+"[\\s\\t\\n]*"+second+".*";
+        Pattern pattern = Pattern.compile(patternStr, Pattern.DOTALL);
+        assertTrue(pattern.matcher(lines).matches());
         close();
     }
 

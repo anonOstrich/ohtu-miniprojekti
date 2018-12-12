@@ -11,6 +11,7 @@ import app.domain.Tag;
 import app.io.IO;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -140,14 +141,15 @@ public class TextUITest {
         }
         scanner = new Scanner(file);
         ui = new TextUI(new ConsoleIO(scanner));
-        String bookmark = "id title x Book";
-        String other = "id title x Other";
-        String blog = "id title x Blog";
-        assertEquals("title", ui.askForEditField(bookmark));
-        assertEquals("url", ui.askForEditField(other));
-        assertEquals("description", ui.askForEditField(blog));
-        assertEquals("tags", ui.askForEditField(bookmark));
-        assertEquals("", ui.askForField());
-        assertEquals("author", ui.askForEditField(bookmark));
+
+        Bookmark bookBookmark =  new BookBookmark("", "", "", new ArrayList<Tag>(), "");
+        Bookmark blogBookmark = new BlogBookmark("", "", new ArrayList<Tag>(), "");
+        Bookmark otherBookmark = new OtherBookmark("", "", new ArrayList<Tag>(), "");
+        assertEquals("title", ui.askForEditField(bookBookmark));
+        assertEquals("url", ui.askForEditField(otherBookmark));
+        assertEquals("description", ui.askForEditField(blogBookmark));
+        assertEquals("tags", ui.askForEditField(bookBookmark));
+        assertEquals("", ui.askForEditField(null));
+        assertEquals("author", ui.askForEditField(bookBookmark));
     }
 }

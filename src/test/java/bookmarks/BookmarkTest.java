@@ -43,6 +43,8 @@ public class BookmarkTest {
         title = "TestTitle";
         description = "TestDescription";
 
+        id = 0L;
+
         tags = new ArrayList<>();
 
         for (int i = 1; i < 4; i++) {
@@ -90,6 +92,8 @@ public class BookmarkTest {
                 + " Description: " + description + "\n"
                 + " Created: " + bookB.getCreated() + "\n"
                 + " Last edited: " + bookB.getUpdated();
+        System.out.println(testString);
+        System.out.println(bookB.toString());
         assertEquals(testString, bookB.toString());
     }
 

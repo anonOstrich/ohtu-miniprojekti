@@ -60,6 +60,7 @@ public class BookBookmark extends Bookmark {
 
     @Override
     public void printInfo(IO io){
+        System.out.println("printINFO");
         printID(io);
 
         printFieldName("Type", io);
@@ -74,6 +75,7 @@ public class BookBookmark extends Bookmark {
         io.print(author);
         io.println("");
         super.printInfo(io);
+        System.out.println("printINFO ok");
     }
 
     @Override

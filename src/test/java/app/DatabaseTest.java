@@ -69,14 +69,14 @@ public class DatabaseTest {
         ArrayList<Tag> tags = new ArrayList<>();
         tags.add(new Tag("horror"));
         dao.editEntry(bookmarkID, "tags", "", tags);
-        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testAuthor"));
-        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testTitle"));
-        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("testDescription"));
-        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("horror"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("testAuthor"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("testTitle"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("testDescription"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("horror"));
         dao.saveBookmarkToDatabase(new BlogBookmark());
         bookmarkID = dao.getBookMarksOnDatabase().get(dao.getBookMarksOnDatabase().size() - 1).getId();
         dao.editEntry(bookmarkID, "url", "www.puup.com", tags);
-        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).contains("www.puup.com"));
+        assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("www.puup.com"));
     }
 
     @Transactional

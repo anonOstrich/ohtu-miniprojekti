@@ -5,14 +5,13 @@ import java.util.List;
 import org.fusesource.jansi.Ansi;
 
 public class StubIO implements IO {
-
     private List<String> lines;
     private int i;
-    private int j;
     private ArrayList<String> prints;
 
     public StubIO(List<String> lines) {
         this.lines = lines;
+        i=0;
         prints = new ArrayList<>();
     }
 
@@ -22,6 +21,7 @@ public class StubIO implements IO {
         for (int i = 0; i < ilines.length; i++) {
             lines.add(ilines[i]);
         }
+        prints = new ArrayList<>();
     }
 
     @Override
@@ -73,22 +73,7 @@ public class StubIO implements IO {
 
     @Override
     public void print(String toPrint) {
-        String[] inputLines = toPrint.split("\n", -1);
-        
-        if (!inputLines[0].isEmpty()) {
-            int size = lines.size();
-            if (size == 0) {
-                lines.add(toPrint);
-            } else {
-                String latestLine = lines.get(size - 1);
-                lines.remove(size - 1);
-                lines.add(size - 1, latestLine + toPrint);
-            }
-        }
-        
-        for(int idx = 1; idx < inputLines.length; idx++){
-            lines.add(inputLines[idx]);
-        }
+        println(toPrint);
     }
 
 }

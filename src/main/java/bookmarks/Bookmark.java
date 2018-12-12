@@ -68,6 +68,9 @@ public abstract class Bookmark {
         this.title = title;
         this.tags = tags;
         this.description = description;
+        this.id = 0L;
+        this.created = new Date();
+        this.updated = new Date();
     }
 
     public String getTitle() {
