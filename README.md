@@ -44,7 +44,7 @@ Ohjelmistotuotantokurssin miniprojekti
 * To run the program, execute `java -jar build/libs/ohtu-miniprojekti-all.jar`
 
 ## User guide
-**Fuction to perform:**
+**Function to perform:**
 
 **1. Add a new bookmark**
   * First, choose which type of bookmark to add:
@@ -53,10 +53,10 @@ Ohjelmistotuotantokurssin miniprojekti
     * Other (O)
   * When a bookmark type is chosen, the application asks the relevant information concerning that type (eg. author, url,  description)
     * Tags are given as lists, where list items are separated by a comma(,)
-  * Each bookmark is given unique ID that is later used to identify bookmarks for editing and removal
+  * Each bookmark is given unique ID that is later used to identify bookmarks for editing and deleting
   
 **2. List all existing bookmarks or tags**
-  * List bookmarks in selected order. Options for ordering are by title or when the bookmark was added to the program. In the latter case you can also choose ascending or descending order.
+  * List bookmarks in selected order. Options for ordering are by title or adding date (ascending or descending order)
   * List all the tags saved in the program. Number of tagged bookmarks is also listed.
   
 **3. Search for bookmarks**
