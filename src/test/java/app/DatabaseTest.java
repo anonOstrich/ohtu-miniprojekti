@@ -113,12 +113,12 @@ public class DatabaseTest {
         dao.deleteBookmarkFromDatabase(false_id);
         assertEquals(1, dao.getBookMarksOnDatabase().size());
     }
-    @Transactional
-    @Test
-    public void initializationWorks(){
-        BookMarkDAO dao=new BookMarkDAO("hibernate.cfg.xml");
-        assertNotNull(dao);
-        dao.close();
-    } 
+//    @Transactional
+//    @Test
+//    public void initializationWorks(){
+//        BookMarkDAO dao=new BookMarkDAO("hibernate.cfg.xml");4
+//        assertNotNull(dao);
+//        dao.close();
+//    } 
 
 }
