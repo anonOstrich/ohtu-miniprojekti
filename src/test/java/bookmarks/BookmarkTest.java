@@ -92,8 +92,6 @@ public class BookmarkTest {
                 + " Description: " + description + "\n"
                 + " Created: " + bookB.getCreated() + "\n"
                 + " Last edited: " + bookB.getUpdated();
-        System.out.println(testString);
-        System.out.println(bookB.toString());
         assertEquals(testString, bookB.toString());
     }
 
