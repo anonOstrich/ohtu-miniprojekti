@@ -43,6 +43,8 @@ public class BookmarkTest {
         title = "TestTitle";
         description = "TestDescription";
 
+        id = 0L;
+
         tags = new ArrayList<>();
 
         for (int i = 1; i < 4; i++) {

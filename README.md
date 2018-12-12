@@ -44,22 +44,30 @@ Ohjelmistotuotantokurssin miniprojekti
 * To run the program, execute `java -jar build/libs/ohtu-miniprojekti-all.jar`
 
 ## User guide
-* In the beginning, user can choose whether to add a new bookmark, to list existing bookmarks, to search for bookmarks, edit a bookmark or delete a bookmark. Select an option with the corresponding number, which is displayed to the left of the command description.
-* Adding a new bookmark
-  * First, user chooses which type of bookmark to add. There are four types:
-    1. Book (B)
-    2. Blog (BG)
-    3. Other (O)
+**Function to perform:**
+
+**1. Add a new bookmark**
+  * First, choose which type of bookmark to add:
+    * Book (B)
+    * Blog (BG)
+    * Other (O)
   * When a bookmark type is chosen, the application asks the relevant information concerning that type (eg. author, url,  description)
     * Tags are given as lists, where list items are separated by a comma(,)
-  * Each bookmark is given unique ID that is later used to identify bookmarks for editing and removal
-* Listing the bookmarks
-  * Select the order in which you wish to see the bookmarks. The options are by title or when the bookmark was added to the program. In the latter case you can also choose ascending or descending order.
-* Editing a bookmark
+  * Each bookmark is given unique ID that is later used to identify bookmarks for editing and deleting
+  
+**2. List all existing bookmarks or tags**
+  * List bookmarks in selected order. Options for ordering are by title or adding date (ascending or descending order)
+  * List all the tags saved in the program. Number of tagged bookmarks is also listed.
+  
+**3. Search for bookmarks**
+  * Search for bookmarks by giving a string of letters to be searched either from title, description or tags. 
+  
+**4. Edit a bookmark**
   * Choose a bookmark to be edited by giving its unique ID
   * Give the field to be edited
   * Give new value for the field 
-* Searching for a bookmark
-  * You can search for bookmarks by giving a string of letters to be searched either from title or description. Only exact matches are displayed. 
-* Deleting a bookmark
+  
+**5. Deleting a bookmark**
   * Give the unique ID of the bookmark to be deleted
+  
+**0. Exit the application**

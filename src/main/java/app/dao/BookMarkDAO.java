@@ -146,23 +146,15 @@ public class BookMarkDAO {
      * Method that returns the info of a single database entry in String form.
      *
      * @param id id of the database entity
-     * @return bookmark.toString
+     * @return bookmark
      */
-    public String getSingleBookmarkInfo(Long id) {
+    public Bookmark getSingleBookmarkInfo(Long id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Bookmark bookmark;
         bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
-        String ret = "";
-        try {
-            ret += bookmark.toString();
-        } catch (Exception e) {
-            System.out.println("Bookmark not found");
-            session.close();
-            return "";
-        }
         session.close();
-        return ret;
+        return bookmark;
     }
 
     /**
