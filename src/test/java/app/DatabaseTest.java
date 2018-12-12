@@ -55,6 +55,7 @@ public class DatabaseTest {
     public void searchMethodWorks() {
         dao.saveBookmarkToDatabase(new BookBookmark("123", "simeon", "book", new ArrayList<Tag>(), ""));
         assertNotNull(dao.searchField("author", "simeon"));
+        assertTrue(dao.searchField("","").isEmpty());
     }
 
     @Transactional
