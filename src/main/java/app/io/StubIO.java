@@ -51,6 +51,27 @@ public class StubIO implements IO {
     }
 
     @Override
+    public void colorPrint(String toPrint, Ansi.Color color, Ansi.Color bgcolor) {
+        // if we don't test colors, there is no need to print them differently 
+        print(toPrint);
+    }
+
+    @Override
+    public void boldPrint(String toPrint) {
+        print(toPrint);
+    }
+
+    @Override
+    public void boldColorPrint(String toPrint, Ansi.Color color) {
+        print(toPrint);
+    }
+
+    @Override
+    public void boldColorPrint(String toPrint, Ansi.Color color, Ansi.Color bgcolor) {
+        print(toPrint);
+    }
+
+    @Override
     public void print(String toPrint) {
         String[] inputLines = toPrint.split("\n", -1);
         

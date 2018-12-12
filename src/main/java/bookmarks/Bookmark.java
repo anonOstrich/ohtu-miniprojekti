@@ -2,7 +2,6 @@ package bookmarks;
 
 import app.domain.Tag;
 import app.io.IO;
-import app.io.StubIO;
 import app.utilities.Utilities;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import org.fusesource.jansi.Ansi;
 //import java.sql.Timestamp;
 
 /**
@@ -139,6 +140,55 @@ public abstract class Bookmark {
         return result;
     }
 
+    public String type() {
+        return "<BUGI>";
+    }
+
+    public Ansi.Color colorOfType() {
+        return Ansi.Color.WHITE;
+    }
+    
+    public void printType(IO io) {
+        io.boldColorPrint(type(), colorOfType());
+    }
+
+
+    /**
+     * Prints tags
+     *
+     * <p>Tags are printed with different background-colors based on hashes
+     * </p>
+     *
+     * @param io IO object used for printing
+     */
+    private void printTags(IO io){
+        for (Tag tag : tags){
+            tag.print(io);
+            io.print(" ");
+        }
+    }
+
+    protected void printID(IO io){
+        io.boldPrint("ID: ");
+        io.boldRedPrint(id.toString());
+        io.println("");
+    }
+    /**
+     * Prints all the name of a field
+     *
+     * <p></p>
+     *
+     * @param fieldName Name of the field
+     * @param io IO object used for printing
+     */
+    protected void printFieldName(String fieldName, IO io){
+        fieldName=" "+fieldName+":";
+        while (fieldName.length() < 15){
+            fieldName+=" ";
+        }
+        io.boldPrint(fieldName);
+    }
+
     /**
      * Prints all the fields of the bookmark
      *
@@ -149,20 +199,26 @@ public abstract class Bookmark {
      *
      * @param io IO object used for printing
      */
-    public void printInfo(IO io) {
-        String info = this.toString();
+    public void printInfo(IO io){
+        printFieldName("Title", io);
+        io.cyanPrint(title);
+        io.println("");
 
-        if (io.getClass() == StubIO.class) {
-            io.println(info);
-            return;
-        }
+        printFieldName("Tags", io);
+        printTags(io);
+        io.println("");
 
-        int indexOfTitleLabel = info.indexOf(" Title:");
-        indexOfTitleLabel += 7;
-        int indexOfTagsLabel = info.indexOf(" Tags:");
-        io.print(info.substring(0, indexOfTitleLabel));
-        io.cyanPrint(info.substring(indexOfTitleLabel, indexOfTagsLabel));
-        io.println(info.substring(indexOfTagsLabel));
+        printFieldName("Desctiption", io);
+        io.print(description);
+        io.println("");
+
+        printFieldName("Created", io);
+        io.print(created.toString());
+        io.println("");
+
+        printFieldName("Last edited", io);
+        io.print(updated.toString());
+        io.println("");
     }
 
     /**
@@ -170,28 +226,23 @@ public abstract class Bookmark {
      *
      * <p>
      * Prints the summary of the bookmark. Everything will be printed with the
-     * basic print method of the IO object, if that object is an instance of
-     * StubIO class; in such a case the color of the ouput is not needed. In
-     * other cases the value of the title field will be printed in cyan, and
-     * everything else in the default color.</p>
+     * basic print method of the IO object.</p>
      *
      * @param io IO object used for printing
      */
     public void printShortInfo(IO io) {
-        String info = this.shortPrint();
-        if (io.getClass() == StubIO.class) {
-            io.println(info);
-        } else {
-            int titleIdx = info.indexOf("Title: ");
-            titleIdx += 7;
-            io.print(info.substring(0, titleIdx));
-            io.cyanPrint(info.substring(titleIdx, titleIdx + this.title.length()));
-            io.println(info.substring(titleIdx + this.title.length()));
-        }
+        io.boldPrint("ID: ");
+        io.boldRedPrint(id.toString());
+        io.print("  ");
+        io.boldPrint("Type: ");
+        printType(io);
+        io.print("  ");
+        io.boldPrint("Title: ");
+        io.cyanPrint(title+"  ");
     }
 
     public String shortPrint() {
-        return "ID: " + this.id + " Title: " + this.title;
+        return "ID: " + this.id + "  Type: " + type() + "  Title: " + this.title;
     }
 
     /**

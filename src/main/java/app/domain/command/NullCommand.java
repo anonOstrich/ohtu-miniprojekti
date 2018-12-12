@@ -47,7 +47,7 @@ public class NullCommand extends Command {
     public boolean execute() {
         ui.printUnrecognizedOption();
         repeatedAttempts++; 
-        return repeatedAttempts > attemptLimit; 
+        return repeatedAttempts < attemptLimit; 
     }
 
 }

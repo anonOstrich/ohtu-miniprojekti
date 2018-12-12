@@ -23,6 +23,26 @@ public class ConsoleIO implements IO {
     }
 
     @Override
+    public void colorPrint(String toPrint, Ansi.Color COLOR, Ansi.Color BGCOLOR) {
+        AnsiConsole.out.print(ansi().fg(COLOR).bg(BGCOLOR).a(toPrint).reset());
+    }
+
+    @Override
+    public void boldPrint(String toPrint) {
+        AnsiConsole.out.print(ansi().bold().a(toPrint).reset());
+    }
+
+    @Override
+    public void boldColorPrint(String toPrint, Ansi.Color COLOR) {
+        AnsiConsole.out.print(ansi().bold().fg(COLOR).a(toPrint).reset());
+    }
+
+    @Override
+    public void boldColorPrint(String toPrint, Ansi.Color COLOR, Ansi.Color BGCOLOR) {
+        AnsiConsole.out.print(ansi().bold().fg(COLOR).bg(BGCOLOR).a(toPrint).reset());
+    }
+
+    @Override
     public void println(String toPrint) {
         System.out.println(toPrint);
     }

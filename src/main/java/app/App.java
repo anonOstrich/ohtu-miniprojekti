@@ -28,15 +28,11 @@ public class App {
         boolean run = true;
         String input;
         Command command;
-        //TODO: hide this to an other class
-
-
+        
         while (run) {
             input = ui.getMenuCommand();
             command = commandManager.getCommandByInput(input);
             run = command.execute();
-
-
         }
 
     }

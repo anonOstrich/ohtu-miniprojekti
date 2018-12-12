@@ -2,6 +2,7 @@ package app.ui;
 
 import app.domain.Tag;
 import app.io.IO;
+import org.fusesource.jansi.Ansi;
 import app.utilities.Validator;
 import bookmarks.Bookmark;
 import bookmarks.BookBookmark;
@@ -31,26 +32,67 @@ public class TextUI {
         initBookmarkTypeToAskEditFieldPrintMap();
     }
 
+    public IO getIO(){
+        return io;
+    }
+
+    public void displayErrorMessage(String msg){
+        io.boldColorPrint(msg, Ansi.Color.WHITE, Ansi.Color.RED);
+        io.println("");
+    }
+
+    public void displaySuccessMessage(String msg){
+        io.boldColorPrint(msg, Ansi.Color.GREEN);
+        io.println("");
+    }
+
+    public void displayMessage(String msg){
+        io.println(msg);
+    }
+
+    public void displayInstructionMessage(String msg){
+        io.boldColorPrint(msg, Ansi.Color.YELLOW);
+        io.println("");
+    }
+
+    public void printFieldName(String msg){
+        io.boldColorPrint(msg, Ansi.Color.WHITE);
+        io.println("");
+    }
+
+    public void printHR1(){
+        //io.println("==================================================");
+        io.println("\n");
+    }
+
+    public void printHR2(){
+        //io.println("--------------------------------------------------");
+        io.println("");
+    }
+
     /**
      * Print the standard welcome message.
      */
     public void printWelcomeMessage() {
-        io.println("Welcome!");
+        io.boldColorPrint("Welcome!", Ansi.Color.BLUE);
+        io.println("");
     }
 
     /**
      * Print the standard goodbye message.
      */
     public void printGoodbyeMessage() {
-        io.println("Goodbye");
+        io.boldColorPrint("Goodbye!", Ansi.Color.BLUE);
+        io.println("");
     }
 
     /**
      * Prints an error if the userinput is not recognizable.
      */
     public void printUnrecognizedOption() {
-        io.println("Unrecognized option");
+        displayErrorMessage("Unrecognized option");
     }
+
 
     /**
      * Prints the available menu options and prompts the user to select one.
@@ -58,18 +100,19 @@ public class TextUI {
      * @return user's choise of command.
      */
     public String getMenuCommand() {
-        io.print("\nSelect one of the following options\n1. ");
-        io.redPrint("Add");
+        displayInstructionMessage("\nSelect one of the following options");
+        io.print("1. ");
+        io.boldRedPrint("Add");
         io.print(" a new bookmark \n2. ");
-        io.redPrint("List");
+        io.boldRedPrint("List");
         io.print(" all existing bookmarks, or tags\n3. ");
-        io.redPrint("Search");
+        io.boldRedPrint("Search");
         io.print(" for bookmarks\n4. ");
-        io.redPrint("Edit");
+        io.boldRedPrint("Edit");
         io.print(" a bookmark\n5. ");
-        io.redPrint("Delete");
+        io.boldRedPrint("Delete");
         io.print(" a bookmark\n0. ");
-        io.redPrint("Exit");
+        io.boldRedPrint("Exit");
         io.println(" the application");
         return io.nextLine();
     }
@@ -81,8 +124,8 @@ public class TextUI {
      * otherwise.
      */
     public String askForField() {
-        io.println("Which field would you like to search?");
-        io.println("Give field (T = Title) (D = Description) (TA = Tag)");
+        displayInstructionMessage("Which field would you like to search?");
+        printFieldName("Give field (T = Title) (D = Description) (TA = Tag)");
         String command = io.nextLine();
         switch (command) {
             case ("T"):
@@ -102,7 +145,7 @@ public class TextUI {
      * @return
      */
     public String askForSearch() {
-        io.println("Give a search term: ");
+        displayInstructionMessage("Give a search term: ");
         return io.nextLine();
     }
 
@@ -112,8 +155,8 @@ public class TextUI {
      * @return bookmark of wanted type
      */
     public Bookmark askForBookmark() {
-        io.println("Add a new bookmark.");
-        io.println("Give type (B = Book) (BG = Blog), (O = Other): ");
+        displayInstructionMessage("Add a new bookmark.");
+        printFieldName("Give type (B = Book) (BG = Blog), (O = Other): ");
         String type = io.nextLine();
 
         Bookmark bookmark = null;
@@ -127,11 +170,10 @@ public class TextUI {
         }
 
         if (bookmark != null) {
-            io.println(defaultSuccessMessage);
+            displaySuccessMessage(defaultSuccessMessage);
             return bookmark;
         }
-
-        io.println("Invalid choice");
+        displayErrorMessage("Invalid choice");
         return null;
 
     }
@@ -142,9 +184,9 @@ public class TextUI {
      * @return
      */
     public String askForListingMethod() {
-        io.println("Choose listing method:");
-        io.println("(T = Title)(CD = Creation time Descending)(CA = Creation time Ascending)");
-        io.println("(LT = List Tags)");
+        displayInstructionMessage("Choose listing method:");
+        printFieldName("(T = Title)(CD = Creation time Descending)(CA = Creation time Ascending)");
+        printFieldName("(LT = List Tags)");
         return io.nextLine();
     }
 
@@ -161,26 +203,28 @@ public class TextUI {
         }
         for (Bookmark bmark : bookmarks) {
             bmark.printInfo(io);
-            io.println("==================================================");
+            printHR1();
         }
     }
 
     public void presentTags(List<Tag> tags) {
         io.println("");
-        io.println("Tags:");
-        io.println("----------------------------------------------");
+        io.boldPrint("Tags:");
+        printHR2();
         if (tags.isEmpty()) {
             io.println("No tags found.");
         }
         for (int i = 0; i < tags.size(); i++) {
             Tag tag = tags.get(i);
             Set<Bookmark> bmarks = tag.getBookmarks();
-            io.println("name: " + tag + "\n" + "bookmarks tagged:");
+            io.boldPrint("tag: ");
+            tag.print(io);
+            io.boldPrint("\n" + "bookmarks tagged:\n");
             for (Bookmark bmark : bmarks) {
-                io.println(bmark.shortPrint());
+                bmark.printShortInfo(io);
             }
-            io.println("Total amount of bookmarks tagged: " + bmarks.size());
-            io.println("==============================================");
+            io.boldPrint("Total amount of bookmarks tagged: " + bmarks.size() + "\n");
+            printHR1();
         }
     }
 
@@ -189,13 +233,14 @@ public class TextUI {
         io.println("Tags:");
         io.println("");
         for (Tag tag : tags) {
-            io.println(tag.toString());
+            tag.print(io);
+            io.println("");
         }
     }
 
     public String askForTag() {
         io.println("");
-        io.println("Enter name of the tag to list bookmarks associated with it:");
+        displayInstructionMessage("Enter name of the tag to list bookmarks associated with it:");
         return io.nextLine();
     }
 
@@ -205,7 +250,7 @@ public class TextUI {
 
     private Bookmark askForOtherBookmarkInfo() {
         OtherBookmark bm = new OtherBookmark();
-        io.println("Url: ");
+        printFieldName("Url: ");
         String url = validUrl();
         bm.setUrl(url);
         askForGeneralBookmarkInfo(bm);
@@ -214,7 +259,7 @@ public class TextUI {
 
     private Bookmark askForBookBookmarkInfo() {
         BookBookmark bm = new BookBookmark();
-        io.println("ISBN: ");
+        printFieldName("ISBN: ");
         String isbn = validISBN();
         bm.setISBN(isbn);
 
@@ -235,7 +280,7 @@ public class TextUI {
 
     private Bookmark askForBlogBookmarkInfo() {
         BlogBookmark bm = new BlogBookmark();
-        io.println("Url: ");
+        printFieldName("Url: ");
         String url = validUrl();
         bm.setUrl(url);
         askForGeneralBookmarkInfo(bm);
@@ -243,13 +288,13 @@ public class TextUI {
     }
 
     private Bookmark askForGeneralBookmarkInfo(Bookmark bookmark) {
-        io.println("Title; ");
+        printFieldName("Title; ");
         String title = validField();
         bookmark.setTitle(title);
 
         List<Tag> tagsList = askForTags();
         bookmark.setTags(tagsList);
-        io.println("Description");
+        printFieldName("Description");
         String description = validField();
         bookmark.setDescription(description);
 
@@ -262,7 +307,7 @@ public class TextUI {
      * @return
      */
     public List<Tag> askForTags() {
-        System.out.println("Tags (separated by commas): ");
+        printFieldName("Tags (separated by commas): ");
         String input = io.nextLine();
         String[] tags = input.split(",");
         List<Tag> result = new ArrayList();
@@ -298,7 +343,7 @@ public class TextUI {
      * @return
      */
     public Long askForBookmarkToEdit(List<Bookmark> bookmarks) {
-        io.println("Select an entry to edit by typing its ID: ");
+        displayInstructionMessage("Select an entry to edit by typing its ID: ");
         shortListBookmarks(bookmarks);
         return getInt();
     }
@@ -311,7 +356,7 @@ public class TextUI {
      * @return
      */
     public Long askForBookmarkToDelete(List<Bookmark> bookmarks) {
-        io.println("Give ID of the bookmark you want to delete: ");
+        displayInstructionMessage("Give ID of the bookmark you want to delete: ");
         shortListBookmarks(bookmarks);
         return getInt();
     }
@@ -320,14 +365,14 @@ public class TextUI {
      * Asks the user for the field they want to edit. Different bookmarktypes
      * have different fields that can be edited.
      *
-     * @param bookmark string form of bookmark that can be used to determine
-     * it's type.
+     * @param bookmark that is beging edited
      * @return
      */
-    public String askForEditField(String bookmark) {
-        if(bookmark.isEmpty()){
+    public String askForEditField(Bookmark bookmark) {
+        if (bookmark == null){
             return "";
         }
+        bookmark.printInfo(io);
         askUserForEditFieldMessage(bookmark);
 
         while (true) {
@@ -348,23 +393,18 @@ public class TextUI {
     }
 
     private void initBookmarkTypeToAskEditFieldPrintMap() {
-        bookmarkTypeToAskEditFieldPrintMap.put("Book", "\nA = Author\nT = title\nD = description\nX = tags");
-        bookmarkTypeToAskEditFieldPrintMap.put("Blogpost", "\nT = title\nU = url\nD = description\nX = tags");
-        bookmarkTypeToAskEditFieldPrintMap.put("Other", "\nT = title\nU = url\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Book", "A = Author\nT = title\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Blogpost", "T = title\nU = url\nD = description\nX = tags");
+        bookmarkTypeToAskEditFieldPrintMap.put("Other", "T = title\nU = url\nD = description\nX = tags");
     }
 
-    private void askUserForEditFieldMessage(String bookmark) {
-        if(bookmark.isEmpty()){
-            return;
-        }
-        String bookmarkType = bookmark.split(" ")[3].trim();
-        String ask = bookmarkType + "\n\nSelect field to edit:";
-
-        ask += bookmarkTypeToAskEditFieldPrintMap.get(bookmarkType);
-
-        io.println(ask);
+    private void askUserForEditFieldMessage(Bookmark bookmark) {
+        String bookmarkType = bookmark.type();
+        printFieldName("Select field to edit:");
+        io.println(bookmarkTypeToAskEditFieldPrintMap.get(bookmarkType));
     }
 
+    
     /**
      * Asks the user for a new entry when the user is in edit state.
      *
@@ -372,12 +412,12 @@ public class TextUI {
      * @return
      */
     public String askForNewField(String field) {
-        io.println("Give new entry for " + field);
+        printFieldName("Give new entry for " + field);
         return io.nextLine();
     }
 
     private String askForInput(String prompt) {
-        io.println(prompt);
+        printFieldName(prompt);
         return io.nextLine();
     }
 
@@ -385,14 +425,14 @@ public class TextUI {
      * Prints a message when the bookmark is succesfully edited.
      */
     public void viewBookmarkEditedMessage() {
-        io.println("Bookmark successfully edited.");
+        displaySuccessMessage("Bookmark successfully edited.");
     }
 
     /**
      * Prints a message when the bookmark is succesfully deleted.
      */
     public void viewBookmarkDeletedMessage() {
-        io.println("Bookmark successfully deleted.");
+        displaySuccessMessage("Bookmark successfully deleted.");
     }
 
     /**
@@ -404,7 +444,7 @@ public class TextUI {
     public String validUrl() {
         String url = io.nextLine();
         while (!Validator.validUrl(url)) {
-            io.println("The url is not valid. Try again. Remember to start the url with \"www\" or \"https://\"");
+            displayErrorMessage("The url is not valid. Try again. Remember to start the url with \"www\" or \"https://\"");
             url = io.nextLine();
         }
         return url;
@@ -419,7 +459,7 @@ public class TextUI {
     public String validField() {
         String title = io.nextLine();
         while (!Validator.validName(title)) {
-            io.println("This field can't be empty, Please try again.");
+            displayErrorMessage("This field can't be empty, Please try again.");
             title = io.nextLine();
         }
         return title;
@@ -434,13 +474,9 @@ public class TextUI {
     public String validISBN() {
         String ISBN = io.nextLine();
         while (!Validator.validISBN(ISBN)) {
-            io.println("The ISBN is not valid. Try again. The ISBN can contain only numbers and lines.");
+            displayErrorMessage("The ISBN is not valid. Try again. The ISBN can contain only numbers and lines.");
             ISBN = io.nextLine();
         }
         return ISBN;
-    }
-   
-    public void displayMessage(String mjono){
-        io.println(mjono);
     }
 }
