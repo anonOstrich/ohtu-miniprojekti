@@ -9,7 +9,7 @@ Feature: Editing an existing bookmark is possible
         And input "T" is entered
         And input "Cucumber tutorial" is entered
         And app is created
-        Then system response will contain "Author: Charles Garfield"
+        Then system response will contain "Author:" -> "Charles Garfield"
 
     Scenario: user can edit the title of an existing bookmark
         Given option "4" is selected
@@ -20,4 +20,4 @@ Feature: Editing an existing bookmark is possible
         And input "T" is entered
         And input "Testercast" is entered
         And app is created
-        Then system response will contain "Title: Testercast"
+        Then system response will contain "Title:" -> "Testercast"

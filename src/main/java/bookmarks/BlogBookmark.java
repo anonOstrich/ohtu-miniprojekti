@@ -1,8 +1,10 @@
 package bookmarks;
 
 import app.domain.Tag;
+import app.io.IO;
 import java.util.List;
 import javax.persistence.*;
+import org.fusesource.jansi.Ansi;
 
 /**
  * Class that is used to store blogbookmarks
@@ -36,9 +38,43 @@ public class BlogBookmark extends Bookmark {
         this.url = url;
     }
 
+
+    @Override
+    public String type(){
+        return "Blogpost";
+    }
+
+    @Override
+    public Ansi.Color colorOfType() {
+        return Ansi.Color.YELLOW;
+    }
+
+
+    @Override
+    public void printInfo(IO io){
+        printID(io);
+
+        printFieldName("Type", io);
+        printType(io);
+        io.println("");
+
+        printFieldName("Url", io);
+        io.print(url);
+        io.println("");
+
+        super.printInfo(io);
+    }
+
+    @Override
+    public void printShortInfo(IO io) {
+        super.printShortInfo(io);
+        io.boldPrint("Url: ");
+        io.println(url);
+    }
+
     @Override
     public String toString() {
-        return "ID: " + id + "\n Type: Blogpost\n Url: " + url + "\n" + super.toString();
+        return "ID: " + id + "\n Type: "+type()+"\n Url: " + url + "\n" + super.toString();
     }
     
     @Override
