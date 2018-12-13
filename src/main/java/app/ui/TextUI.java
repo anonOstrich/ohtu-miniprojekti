@@ -97,7 +97,7 @@ public class TextUI {
     /**
      * Prints the available menu options and prompts the user to select one.
      *
-     * @return user's choise of command.
+     * @return user's choice of command.
      */
     public String getMenuCommand() {
         displayInstructionMessage("\nSelect one of the following options");
@@ -262,30 +262,22 @@ public class TextUI {
 
     private Bookmark askForOtherBookmarkInfo() {
         OtherBookmark bm = new OtherBookmark();
-        printFieldName("Url: ");
-        String url = validUrl();
-        bm.setUrl(url);
+        askForUrl(bm);
         askForGeneralBookmarkInfo(bm);
         return bm;
     }
 
     private Bookmark askForBookBookmarkInfo() {
         BookBookmark bm = new BookBookmark();
+        
+        String author = askForInput("Author: ");
+        bm.setAuthor(author);
+        
+        askForGeneralBookmarkInfo(bm);
+        
         printFieldName("ISBN: ");
         String isbn = validISBN();
         bm.setISBN(isbn);
-
-        String title = askForInput("Title: ");
-        bm.setTitle(title);
-
-        String author = askForInput("Author: ");
-        bm.setAuthor(author);
-
-        List<Tag> tagsList = askForTags();
-        bm.setTags(tagsList);
-
-        String description = askForInput("Description: ");
-        bm.setDescription(description);
 
         return bm;
     }
@@ -306,6 +298,7 @@ public class TextUI {
 
         List<Tag> tagsList = askForTags();
         bookmark.setTags(tagsList);
+        
         printFieldName("Description");
         String description = validField();
         bookmark.setDescription(description);
@@ -324,11 +317,16 @@ public class TextUI {
         String[] tags = input.split(",");
         List<Tag> result = new ArrayList();
         for (int i = 0; i < tags.length; i++) {
-            // pitäisikö tässä vaiheessa katsoa, että ei lisätä uutta tagia jos samanniminen on?
             result.add(new Tag(tags[i].trim()));
         }
 
         return result;
+    }
+    
+    private void askForUrl(OtherBookmark bm) {
+        printFieldName("Url: ");
+        String url = validUrl();
+        bm.setUrl(url);
     }
 
     private void shortListBookmarks(List<Bookmark> bookmarks) {
@@ -492,4 +490,5 @@ public class TextUI {
         }
         return ISBN;
     }
+
 }
