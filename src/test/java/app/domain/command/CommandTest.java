@@ -37,6 +37,15 @@ public class CommandTest {
         verify(dao).getTagDAO(); 
     }
     
+    @Test
+    public void executingEditDisplaysErrorWithInvalidId(){
+        when(ui.askForBookmarkToEdit(null)).thenReturn(-1L); 
+        when(dao.getSingleBookmarkInfo(-1L)).thenReturn(null);
+        when(ui.askForEditField(null)).thenReturn("");
+        new EditCommand(ui, dao).execute(); 
+        verify(ui).displayErrorMessage("Not a valid ID");
+    }
+    
     
     @Test
     public void executingExitCommandReturnsFalse(){

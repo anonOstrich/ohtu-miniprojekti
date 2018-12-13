@@ -31,12 +31,24 @@ public class BookMarkDAO {
     public final String creationOrderQueryASC = "FROM Bookmark b ORDER BY b.created ASC";
 
     /**
-     * Initializes the class with a SessionFactory.
+     * Initializes the class with the default databse
      */
     public BookMarkDAO() {
         this(Utilities.DEPLOYMENT_DATABASE);
     }
 
+    /**
+     *
+     * Initializes the class with a SessionFactory
+     *
+     * <p>
+     * The factory will be able to provide connections to the database specified
+     * by the given name. TagDAO is also initialized, and it will connect to the
+     * same database.</p>
+     *
+     * @param configurationFileName Name of the database to be used. Different
+     * one is used for tests
+     */
     public BookMarkDAO(String configurationFileName) {
         sessionFactory = new Configuration().configure(configurationFileName).buildSessionFactory();
         // test database probably needs no legitimate-looking initialization data
@@ -48,7 +60,7 @@ public class BookMarkDAO {
     }
 
     /**
-     * Closes the connection.
+     * Closes the connection and asks tagDAO to do the same
      */
     public void close() {
         if (sessionFactory != null) {
@@ -73,12 +85,13 @@ public class BookMarkDAO {
      * @return list of Bookmarks
      */
     public List<Bookmark> getBookmarksWithQuery(String query) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        // concern: can an user influence the query? Injection danger?
-        List result = session.createQuery(query).list();
-        session.getTransaction().commit();
-        session.close();
+        List result;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            // concern: can an user influence the query? Injection danger?
+            result = session.createQuery(query).list();
+            session.getTransaction().commit();
+        }
         return (List<Bookmark>) result;
     }
 
@@ -107,12 +120,12 @@ public class BookMarkDAO {
      * @param bookmark bookmark to be saved
      */
     public void saveBookmarkToDatabase(Bookmark bookmark) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(bookmark);
-        bookmark.setTags(tagDAO.saveTagsToDatabase(session, bookmark.getTags()));
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(bookmark);
+            bookmark.setTags(tagDAO.saveTagsToDatabase(session, bookmark.getTags()));
+            session.getTransaction().commit();
+        }
     }
 
     /**
@@ -128,58 +141,59 @@ public class BookMarkDAO {
         if (field.equals("") || search.equals("")) {
             return new ArrayList<Bookmark>();
         }
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria cr = session.createCriteria(Bookmark.class);
-        cr.add(Restrictions.like(field, "%" + search + "%").ignoreCase());
-        List result = cr.list();
-        session.getTransaction().commit();
-        session.close();
+        List result;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Criteria cr = session.createCriteria(Bookmark.class);
+            cr.add(Restrictions.like(field, "%" + search + "%").ignoreCase());
+            result = cr.list();
+            session.getTransaction().commit();
+        }
         return (List<Bookmark>) result;
     }
-    
+
     /**
-     * Used to search all fields in the database using a search term. The
-     * term doesn't need to be an exact match, since it uses the like-operator.
+     * Used to search all fields in the database using a search term. The term
+     * doesn't need to be an exact match, since it uses the like-operator.
      *
-     * @param field field to be searched
      * @param search term used to search
      * @return list of bookmarks. If either of the parameters are invalid i.e
      * empty, this method returns an empty list.
      */
-
     public List<Bookmark> searchAll(String search) {
         if (search.equals("")) {
             return new ArrayList<Bookmark>();
         }
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria cr = session.createCriteria(Bookmark.class);
-        Disjunction dis = Restrictions.disjunction();
-        dis.add(Restrictions.like("author", "%" + search + "%").ignoreCase());
-        dis.add(Restrictions.like("title", "%" + search + "%").ignoreCase());
-        dis.add(Restrictions.like("description", "%" + search + "%").ignoreCase());
-        dis.add(Restrictions.like("url", "%" + search + "%").ignoreCase());
-        dis.add(Restrictions.like("ISBN", "%" + search + "%").ignoreCase());
-        cr.add(dis);
-        List result = cr.list();
-        session.getTransaction().commit();
-        session.close();
+        List result;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Criteria cr = session.createCriteria(Bookmark.class);
+            Disjunction dis = Restrictions.disjunction();
+            dis.add(Restrictions.like("author", "%" + search + "%").ignoreCase());
+            dis.add(Restrictions.like("title", "%" + search + "%").ignoreCase());
+            dis.add(Restrictions.like("description", "%" + search + "%").ignoreCase());
+            dis.add(Restrictions.like("url", "%" + search + "%").ignoreCase());
+            dis.add(Restrictions.like("ISBN", "%" + search + "%").ignoreCase());
+            cr.add(dis);
+            result = cr.list();
+            session.getTransaction().commit();
+        }
         return (List<Bookmark>) result;
     }
 
     /**
-     * Method that returns the info of a single database entry in String form.
+     * Returns the info of a single database entry
      *
      * @param id id of the database entity
      * @return bookmark
      */
     public Bookmark getSingleBookmarkInfo(Long id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         Bookmark bookmark;
-        bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Query query = session.createQuery("from Bookmark where id = :id").setParameter("id", id);
+            bookmark = (Bookmark) query.uniqueResult();
+        }
         return bookmark;
     }
 
@@ -193,19 +207,18 @@ public class BookMarkDAO {
      * @return success, true if bookmark was edited, false if not
      */
     public boolean editEntry(Long id, String field, String newEntry, List<Tag> taglist) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         Bookmark bookmark;
         try {
-            bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
+            bookmark = (Bookmark) getSingleBookmarkInfo(id);
         } catch (Exception e) {
-            session.close();
             return false;
         }
         if (!Validator.validName(newEntry) && taglist.isEmpty()) {
-            session.close();
             return false;
         }
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         switch (field) {
             case ("author"):
                 bookmark.updateAttribute("author", newEntry);
@@ -224,7 +237,7 @@ public class BookMarkDAO {
                 bookmark.setUrl(newEntry);
                 break;
             case ("ISBN"):
-                if(!Validator.validISBN(newEntry)){
+                if (!Validator.validISBN(newEntry)) {
                     session.close();
                     return false;
                 }
@@ -242,6 +255,12 @@ public class BookMarkDAO {
         return true;
     }
 
+    /**
+     * Updates the information of the bookmark in the database
+     *
+     * @param session
+     * @param bookmark
+     */
     public void updateInformation(Session session, Bookmark bookmark) {
         session.evict(bookmark);
         session.update(bookmark);
@@ -250,20 +269,21 @@ public class BookMarkDAO {
     }
 
     /**
-     * bookmark from database by bookmark-id.
+     * Deletes bookmark from database by bookmark id.
      *
      * @param bookmark_id
-     * @return success, true if bookmark was deleted, false if not
+     * @return true if bookmark was deleted, false if not
      */
     public boolean deleteBookmarkFromDatabase(Long bookmark_id) {
-        Session session = sessionFactory.openSession();
         Bookmark bookmark;
         try {
-            bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + bookmark_id).uniqueResult();
+            bookmark = getSingleBookmarkInfo(bookmark_id);
         } catch (Exception e) {
             System.out.println("Bookmark not found");
             return false;
         }
+        Session session = sessionFactory.openSession();
+
         if (bookmark != null) {
             session.beginTransaction();
             session.delete(session.load(Bookmark.class, bookmark_id));
@@ -278,10 +298,22 @@ public class BookMarkDAO {
         return tagDAO;
     }
 
+    /**
+     * 
+     * @return True if no bookmarks in database
+     */
     private boolean databaseIsEmpty() {
         return getBookMarksOnDatabase().isEmpty();
     }
 
+    /**
+     * Fills initials bookmarks, if the database is empty
+     * 
+     * <p>Reads the insert statements from the file initial.sql, which is
+     * located either in the resoures folder or in the same .jar package
+     * as the program.</p>
+     * 
+     */
     private void initializeDatabase() {
         String objects = "";
         ClassLoader cl = getClass().getClassLoader();
