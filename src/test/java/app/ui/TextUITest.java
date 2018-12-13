@@ -12,14 +12,10 @@ import app.io.IO;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
-import java.util.Scanner;
 
 public class TextUITest {
 
@@ -35,11 +31,14 @@ public class TextUITest {
 
     private void initializeBookmarkData() {
         this.inputLines.add("B");
-        this.inputLines.add("1234");
-        this.inputLines.add("testTitle");
         this.inputLines.add("testAuthor");
+        this.inputLines.add("testTitle");
+        
         this.inputLines.add("testTag1, testTag2");
         this.inputLines.add("testDescription");
+        this.inputLines.add("1234");
+
+
     }
 
     private void initializeOtherBookmarkData() {
