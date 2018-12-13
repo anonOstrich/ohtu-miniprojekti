@@ -22,10 +22,7 @@ public class Validator {
      * @return
      */
     public static boolean validUrl(String url) {
-        if(!url.matches("^(http://)?www\\.[a-z0-9]+\\.[a-z]{2,6}(\\/[a-z0-9]*)?$")){
-            return false;
-        }
-        return true;
+        return url.matches("^(http://)?www\\.[a-z0-9-]+\\.[a-z]{2,6}(\\/[a-z0-9.-_\\?!\\+=&]*)?$");
         
     }
 
