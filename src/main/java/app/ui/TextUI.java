@@ -12,8 +12,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- *
- * @author jussiste
+ * For displaying information to and querying information from the user of the program
+ * 
  */
 public class TextUI {
 
@@ -62,13 +62,11 @@ public class TextUI {
     }
 
     public void printHR1() {
-        //io.println("==================================================");
-        io.println("\n");
+        io.println("\n==================================================\n");
     }
 
     public void printHR2() {
-        //io.println("--------------------------------------------------");
-        io.println("");
+        io.println("\n--------------------------------------------------\n");;
     }
 
     /**
@@ -88,7 +86,7 @@ public class TextUI {
     }
 
     /**
-     * Prints an error if the userinput is not recognizable.
+     * Prints an error if the user input is not recognizable.
      */
     public void printUnrecognizedOption() {
         displayErrorMessage("Unrecognized option");

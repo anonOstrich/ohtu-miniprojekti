@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app.utilities;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  *
@@ -29,10 +22,7 @@ public class Validator {
      * @return
      */
     public static boolean validUrl(String url) {
-        if(!url.matches("^(http://)?www\\.[a-z0-9]+\\.[a-z]{2,6}(\\/[a-z0-9]*)?$")){
-            return false;
-        }
-        return true;
+        return url.matches("^(http://)?www\\.[a-z0-9-]+\\.[a-z]{2,6}(\\/[a-z0-9.-_\\?!\\+=&]*)?$");
         
     }
 

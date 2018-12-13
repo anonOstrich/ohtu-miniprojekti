@@ -23,88 +23,101 @@ import java.util.Scanner;
 
 public class TextUITest {
 
-    private Scanner scanner;
     private TextUI ui;
     private InputStream in;
+    private StubIO io;
+    private List<String> inputLines = new ArrayList();
 
     @Before
     public void setUp() {
+        this.inputLines = new ArrayList<>();
+    }
 
+    private void initializeBookmarkData() {
+        this.inputLines.add("B");
+        this.inputLines.add("1234");
+        this.inputLines.add("testTitle");
+        this.inputLines.add("testAuthor");
+        this.inputLines.add("testTag1, testTag2");
+        this.inputLines.add("testDescription");
+    }
+
+    private void initializeOtherBookmarkData() {
+        this.inputLines.add("O");
+        this.inputLines.add("www.otherurl.com");
+        this.inputLines.add("otherTitle");
+        this.inputLines.add("otherTag");
+        this.inputLines.add("Description for a peculiar bookmark");
+    }
+
+    private void initializeBlogBookmarkData() {
+        this.inputLines.add("BG");
+        this.inputLines.add("www.testurl.com");
+        this.inputLines.add("testTitle");
+        this.inputLines.add("testTag");
+        this.inputLines.add("Description for a peculiar bookmark");
+    }
+
+    private void initializeEdit() {
+        this.inputLines.add("T");
+        this.inputLines.add("U");
+        this.inputLines.add("D");
+        this.inputLines.add("X");
+        this.inputLines.add("P");
+        this.inputLines.add("A");
+        this.inputLines.add("I");
+    }
+
+    private void initializeSearch() {
+        inputLines.add("T");
+        inputLines.add("U");
+        inputLines.add("D");
+        inputLines.add("A");
+        inputLines.add("I");
+        inputLines.add("TA");
+        inputLines.add("Y");
+        inputLines.add("P");
     }
 
     @Test
-    public void textUIcreatesBookBookmarks() throws FileNotFoundException {
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/bookmark.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        scanner = new Scanner(file);
-
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void textUIcreatesBookBookmarks() {
+        initializeBookmarkData();
+        this.io = new StubIO(inputLines);
+        ui = new TextUI(io);
         Bookmark bookmark = ui.askForBookmark();
-
         assertEquals(bookmark.getDescription(), "testDescription");
         assertEquals(bookmark.getTitle(), "testTitle");
     }
 
     @Test
-    public void textUIcreatesBlogBookmarks() throws FileNotFoundException {
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/blogbookmark.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        scanner = new Scanner(file);
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void textUIcreatesBlogBookmarks() {
+        initializeBlogBookmarkData();
+        io = new StubIO(inputLines);
+        ui = new TextUI(io);
         Bookmark bookmark = ui.askForBookmark();
-        try {
-            BlogBookmark blog = (BlogBookmark) bookmark;
-            assertEquals("www.testurl.com", blog.getUrl());
-        } catch (Exception e) {
-            assertTrue(false);
-        }
+        BlogBookmark blog = (BlogBookmark) bookmark;
+        assertEquals("www.testurl.com", blog.getUrl());
         assertEquals(bookmark.getTitle(), "testTitle");
     }
 
     @Test
-    public void textUICreatesOtherBookmarks() throws FileNotFoundException {
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/otherbookmark.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        scanner = new Scanner(file);
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void textUICreatesOtherBookmarks() {
+        initializeOtherBookmarkData();
+        io = new StubIO(inputLines);
+        ui = new TextUI(io);
         Bookmark bookmark = ui.askForBookmark();
         assertTrue(bookmark.toString().contains("Type: Other"));
-
-        try {
-            OtherBookmark other = (OtherBookmark) bookmark;
-            assertEquals("www.otherurl.com", other.getUrl());
-        } catch (Exception e) {
-            assertTrue(false);
-        }
+        OtherBookmark other = (OtherBookmark) bookmark;
+        assertEquals("www.otherurl.com", other.getUrl());
         assertEquals("otherTitle", bookmark.getTitle());
         assertEquals("Description for a peculiar bookmark", bookmark.getDescription());
     }
 
     @Test
-    public void invalidInputCreatesNoBookMark() throws FileNotFoundException {
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/invalid.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        scanner = new Scanner(file);
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void invalidInputCreatesNoBookMark() {
+        inputLines.add("X");
+        io = new StubIO(inputLines);
+        ui = new TextUI(io);
         Bookmark bookmark = ui.askForBookmark();
         assertNull(bookmark);
     }
@@ -132,17 +145,12 @@ public class TextUITest {
     }
 
     @Test
-    public void editBookmarkWorksOnDifferentFields() throws FileNotFoundException {
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/editfield.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        scanner = new Scanner(file);
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void editBookmarkWorksOnDifferentFields() {
+        initializeEdit();
+        io = new StubIO(inputLines);
+        ui = new TextUI(io);
 
-        Bookmark bookBookmark =  new BookBookmark("", "", "", new ArrayList<Tag>(), "");
+        Bookmark bookBookmark = new BookBookmark("", "", "", new ArrayList<Tag>(), "");
         Bookmark blogBookmark = new BlogBookmark("", "", new ArrayList<Tag>(), "");
         Bookmark otherBookmark = new OtherBookmark("", "", new ArrayList<Tag>(), "");
         assertEquals("title", ui.askForEditField(bookBookmark));
@@ -153,24 +161,20 @@ public class TextUITest {
         assertEquals("author", ui.askForEditField(bookBookmark));
         assertEquals("ISBN", ui.askForEditField(bookBookmark));
     }
+
     @Test
-    public void searchFieldpromptGivesCorrectStrings() throws FileNotFoundException{
-        File file = null;
-        try {
-            file = new File("src/test/resources/app/testinput/editfield.txt");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        scanner = new Scanner(file);
-        ui = new TextUI(new ConsoleIO(scanner));
+    public void searchFieldpromptGivesCorrectStrings() {
+        initializeSearch();
+        io = new StubIO(inputLines);
+        ui = new TextUI(io);
         assertEquals(ui.askForField(), "title");
         assertEquals(ui.askForField(), "url");
         assertEquals(ui.askForField(), "description");
-        assertEquals(ui.askForField(), "");
-        assertEquals(ui.askForField(), "");
         assertEquals(ui.askForField(), "author");
         assertEquals(ui.askForField(), "ISBN");
         assertEquals(ui.askForField(), "tag");
         assertEquals(ui.askForField(), "all");
+        assertEquals(ui.askForField(), "");
     }
+
 }
