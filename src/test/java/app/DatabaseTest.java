@@ -55,6 +55,7 @@ public class DatabaseTest {
     public void searchMethodWorks() {
         dao.saveBookmarkToDatabase(new BookBookmark("123", "simeon", "book", new ArrayList<Tag>(), ""));
         assertNotNull(dao.searchField("author", "simeon"));
+        assertTrue(dao.searchField("","").isEmpty());
     }
 
     @Transactional
@@ -66,6 +67,7 @@ public class DatabaseTest {
         dao.editEntry(bookmarkID, "title", "testTitle", new ArrayList<Tag>());
         dao.editEntry(bookmarkID, "description", "testDescription", new ArrayList<Tag>());
         dao.editEntry(bookmarkID, "title", "testTitle", new ArrayList<Tag>());
+        dao.editEntry(bookmarkID, "ISBN", "1234-1234", new ArrayList<Tag>());
         ArrayList<Tag> tags = new ArrayList<>();
         tags.add(new Tag("horror"));
         dao.editEntry(bookmarkID, "tags", "", tags);
@@ -77,6 +79,16 @@ public class DatabaseTest {
         bookmarkID = dao.getBookMarksOnDatabase().get(dao.getBookMarksOnDatabase().size() - 1).getId();
         dao.editEntry(bookmarkID, "url", "www.puup.com", tags);
         assertTrue(dao.getSingleBookmarkInfo(bookmarkID).toString().contains("www.puup.com"));
+    }
+
+    @Transactional
+    @Test
+    public void invalidEntryAttemtsDontEditEntry() {
+        dao.saveBookmarkToDatabase(new BookBookmark());
+        assertFalse(dao.editEntry(-1L, "", "", new ArrayList<Tag>()));
+        assertFalse(dao.editEntry(1L, "ISBN", "isbn", new ArrayList<Tag>()));
+        assertFalse(dao.editEntry(1L, "author", "", new ArrayList<Tag>()));
+        assertFalse(dao.editEntry(1L, "url", "url", new ArrayList<Tag>()));
     }
 
     @Transactional
@@ -113,12 +125,15 @@ public class DatabaseTest {
         dao.deleteBookmarkFromDatabase(false_id);
         assertEquals(1, dao.getBookMarksOnDatabase().size());
     }
+
     @Transactional
     @Test
-    public void initializationWorks(){
-        BookMarkDAO dao=new BookMarkDAO("hibernate.cfg.xml");
-        assertNotNull(dao);
-        dao.close();
-    } 
+    public void searchAllReturnsWithAllFields() {
+        dao.saveBookmarkToDatabase(new BookBookmark("test", "", "", new ArrayList<Tag>(), ""));
+        dao.saveBookmarkToDatabase(new OtherBookmark("", "test", new ArrayList<Tag>(), ""));
+        dao.saveBookmarkToDatabase(new OtherBookmark("", "", new ArrayList<Tag>(), "test"));
+        assertEquals(3L, dao.searchAll("test").size());
+        assertEquals(0L, dao.searchAll("").size());
+    }
 
 }

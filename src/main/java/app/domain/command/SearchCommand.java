@@ -31,11 +31,14 @@ public class SearchCommand extends Command {
             if (!found) {
                 ui.printTagsNotFound();
             }
+        } else if (searchfield.equals("all")) {
+            search = ui.askForSearch();
+            ui.printBookmarkList(dao.searchAll(search));
         } else {
             search = ui.askForSearch();
             ui.printBookmarkList(dao.searchField(searchfield, search));
         }
-        return true; 
+        return true;
     }
 
 }

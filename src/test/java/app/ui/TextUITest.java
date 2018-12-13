@@ -151,5 +151,26 @@ public class TextUITest {
         assertEquals("tags", ui.askForEditField(bookBookmark));
         assertEquals("", ui.askForEditField(null));
         assertEquals("author", ui.askForEditField(bookBookmark));
+        assertEquals("ISBN", ui.askForEditField(bookBookmark));
+    }
+    @Test
+    public void searchFieldpromptGivesCorrectStrings() throws FileNotFoundException{
+        File file = null;
+        try {
+            file = new File("src/test/resources/app/testinput/editfield.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        scanner = new Scanner(file);
+        ui = new TextUI(new ConsoleIO(scanner));
+        assertEquals(ui.askForField(), "title");
+        assertEquals(ui.askForField(), "url");
+        assertEquals(ui.askForField(), "description");
+        assertEquals(ui.askForField(), "");
+        assertEquals(ui.askForField(), "");
+        assertEquals(ui.askForField(), "author");
+        assertEquals(ui.askForField(), "ISBN");
+        assertEquals(ui.askForField(), "tag");
+        assertEquals(ui.askForField(), "all");
     }
 }

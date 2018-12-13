@@ -4,16 +4,15 @@ import bookmarks.Bookmark;
 
 import app.domain.Tag;
 import app.utilities.Utilities;
-import bookmarks.OtherBookmark;
-
+import app.utilities.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import org.hibernate.Criteria;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
@@ -111,10 +110,7 @@ public class BookMarkDAO {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(bookmark);
-        // save tags and stuff
-
         bookmark.setTags(tagDAO.saveTagsToDatabase(session, bookmark.getTags()));
-
         session.getTransaction().commit();
         session.close();
     }
@@ -135,7 +131,37 @@ public class BookMarkDAO {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria cr = session.createCriteria(Bookmark.class);
-        cr.add(Restrictions.like(field, "%" + search + "%"));
+        cr.add(Restrictions.like(field, "%" + search + "%").ignoreCase());
+        List result = cr.list();
+        session.getTransaction().commit();
+        session.close();
+        return (List<Bookmark>) result;
+    }
+    
+    /**
+     * Used to search all fields in the database using a search term. The
+     * term doesn't need to be an exact match, since it uses the like-operator.
+     *
+     * @param field field to be searched
+     * @param search term used to search
+     * @return list of bookmarks. If either of the parameters are invalid i.e
+     * empty, this method returns an empty list.
+     */
+
+    public List<Bookmark> searchAll(String search) {
+        if (search.equals("")) {
+            return new ArrayList<Bookmark>();
+        }
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria cr = session.createCriteria(Bookmark.class);
+        Disjunction dis = Restrictions.disjunction();
+        dis.add(Restrictions.like("author", "%" + search + "%").ignoreCase());
+        dis.add(Restrictions.like("title", "%" + search + "%").ignoreCase());
+        dis.add(Restrictions.like("description", "%" + search + "%").ignoreCase());
+        dis.add(Restrictions.like("url", "%" + search + "%").ignoreCase());
+        dis.add(Restrictions.like("ISBN", "%" + search + "%").ignoreCase());
+        cr.add(dis);
         List result = cr.list();
         session.getTransaction().commit();
         session.close();
@@ -173,10 +199,11 @@ public class BookMarkDAO {
         try {
             bookmark = (Bookmark) session.createQuery("from Bookmark where id = " + id).uniqueResult();
         } catch (Exception e) {
-            System.out.println("Bookmark not found");
+            session.close();
             return false;
         }
-        if (bookmark == null) {
+        if (!Validator.validName(newEntry) && taglist.isEmpty()) {
+            session.close();
             return false;
         }
         switch (field) {
@@ -190,12 +217,24 @@ public class BookMarkDAO {
                 bookmark.setDescription(newEntry);
                 break;
             case ("url"):
+                if (!Validator.validUrl(newEntry)) {
+                    session.close();
+                    return false;
+                }
                 bookmark.setUrl(newEntry);
+                break;
+            case ("ISBN"):
+                if(!Validator.validISBN(newEntry)){
+                    session.close();
+                    return false;
+                }
+                bookmark.setISBN(newEntry);
                 break;
             case ("tags"):
                 bookmark.setTags(tagDAO.saveTagsToDatabase(session, taglist));
                 break;
             default:
+                session.close();
                 return false;
         }
         updateInformation(session, bookmark);
@@ -245,9 +284,6 @@ public class BookMarkDAO {
 
     private void initializeDatabase() {
         String objects = "";
-
-        // classloader and resource as stream are a cumbersome solution, 
-        // but the only one I managed to make work in every situation (also running as a .jar)
         ClassLoader cl = getClass().getClassLoader();
         try (Scanner s = new Scanner(cl.getResourceAsStream("initial.sql"))) {
             while (s.hasNext()) {
