@@ -1,6 +1,0 @@
-B
-1234
-testTitle
-testAuthor
-testTag1, testTag2
-testDescription
