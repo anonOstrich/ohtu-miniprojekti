@@ -37,11 +37,12 @@ public class Stepdefs {
 
         inputLines.add("1");
         inputLines.add("B");
-        inputLines.add("12345-12345");
-        inputLines.add("Cucumber tutorial");
         inputLines.add("Cucumber Chief");
+        inputLines.add("Cucumber tutorial");
         inputLines.add("cucumber,tutorial");
         inputLines.add("a tutorial for definition testing");
+        inputLines.add("12345-12345");
+
 
         inputLines.add("1");
         inputLines.add("BG");
