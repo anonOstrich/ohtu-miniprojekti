@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.fusesource.jansi.Ansi;
 
+/**
+ * A simple implementation of IO for testing purposes
+ * 
+ * <p>Since there is no easy way to test for color output, the color-related
+ * methods are implemented in the same way as colorless ones.</p>
+ * 
+ */
 public class StubIO implements IO {
     private List<String> lines;
     private int i;
@@ -46,13 +53,11 @@ public class StubIO implements IO {
 
     @Override
     public void colorPrint(String toPrint, Ansi.Color color) {
-        // if we don't test colors, there is no need to print them differently 
         print(toPrint);
     }
 
     @Override
     public void colorPrint(String toPrint, Ansi.Color color, Ansi.Color bgcolor) {
-        // if we don't test colors, there is no need to print them differently 
         print(toPrint);
     }
 

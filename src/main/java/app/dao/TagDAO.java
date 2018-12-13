@@ -15,12 +15,18 @@ public class TagDAO {
     private SessionFactory sessionFactory;
 
     /**
-     * Initializes the class with a SessionFactory.
+     * Initializes the class with the default database
      */
     public TagDAO() {
         this(Utilities.DEPLOYMENT_DATABASE);
     }
 
+    /**
+     * Initializes an instance with a SessionFactory
+     *
+     * @param configurationFileName Name of the database to be used in
+     * connections
+     */
     public TagDAO(String configurationFileName) {
         sessionFactory = new Configuration().configure(configurationFileName).buildSessionFactory();
     }
@@ -34,6 +40,10 @@ public class TagDAO {
         }
     }
 
+    /**
+     *
+     * @return List of all the tags
+     */
     public List<Tag> getTagsOnDatabase() {
         List result;
         try (Session session = sessionFactory.openSession()) {
@@ -44,56 +54,96 @@ public class TagDAO {
         return (List<Tag>) result;
     }
 
+    /**
+     * Creates a session for database connection, then queries for the suitable
+     * bookmark
+     *
+     * @param name
+     * @return Tag
+     */
     public Tag getTagWithName(String name) {
         Tag result;
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
             result = getTagWithName(session, name);
-            session.getTransaction().commit();
         }
         return result;
     }
 
+    /**
+     * Using the parameter session, seeks ot return the bookmark with the
+     * matching name
+     *
+     * @param session An open session that will be used to query
+     * @param name Search term
+     * @return The tag with the corresponding name, or null if such does not
+     * exist.
+     */
     public Tag getTagWithName(Session session, String name) {
         Query query = session.createQuery("from Tag where name = :name");
-        query.setParameter("name", name);
+        query.setParameter("name", name.trim().toLowerCase());
         return (Tag) query.uniqueResult();
     }
 
-    public void saveTagToDatabase(Tag tag) {
-        Tag existing = getTagWithName(tag.getName());
-        if (existing != null) {
-            tag = existing;
-        }
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.save(tag);
-            session.getTransaction().commit();
-        }
-    }
-
+    /**
+     * Saves the given tag in the database.
+     *
+     * <p>
+     * The tag will not be saved if there is already a tag with the same name in
+     * the database</p>
+     *
+     * @param session Session for connections
+     * @param tag To be saved
+     * @return Tag that is saved in the database
+     */
     public Tag saveTagToDatabase(Session session, Tag tag) {
         Tag existing = getTagWithName(session, tag.getName());
         if (existing != null) {
-            session.delete(tag); 
-            tag = existing;
+            return existing;
         }
         session.save(tag);
-        return tag; 
+        return tag;
     }
 
+    /**
+     * Otherwise the same, but will create the session it needs for db
+     * connections
+     *
+     * @param tag Tag to be saved
+     */
+    public void saveTagToDatabase(Tag tag) {
+        try (Session session = sessionFactory.openSession()) {
+            saveTagToDatabase(session, tag);
+        }
+    }
+
+    /** 
+     * Saves the tags to the database
+     * 
+     * <p>Uses the provided connection for database connections</p>
+     * 
+     * @param session Connectivity component
+     * @param tags All the tags to be saved
+     * @return All the tags with the same names as the provided tags, all of these
+     * stored in the database
+     */
+    public List<Tag> saveTagsToDatabase(Session session, Collection<Tag> tags) {
+        List<Tag> result = new ArrayList();
+        for (Tag t : tags) {
+            result.add(saveTagToDatabase(session, t));
+        }
+        return result;
+    }
+
+    /** 
+     * Otherwise same as above, but the connection to the database is created and not provided 
+     * as a parameter
+     * 
+     * @param tags 
+     */
     public void saveTagsToDatabase(Collection<Tag> tags) {
         for (Tag t : tags) {
             saveTagToDatabase(t);
         }
-    }
-
-    public List<Tag> saveTagsToDatabase(Session session, Collection<Tag> tags) {
-        List<Tag> result = new ArrayList(); 
-        for (Tag t : tags) {
-            result.add(saveTagToDatabase(session, t));
-        }
-        return result; 
     }
 
 }
