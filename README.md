@@ -28,7 +28,7 @@ Ohjelmistotuotantokurssin miniprojekti
   * [Java](https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 * Click 'releases' on this main page of the project (to the left of the green 'Clone or download' button)
 * Download the .jar file of the latest release 
-* Open the command prompt, navigate to the folder where you downloaded the .jar file, and execute the command `java -jar bookmark_libraryV3.jar` (replace the filename with the correct one if you have renamed it)
+* Open the command prompt, navigate to the folder where you downloaded the .jar file, and execute the command `java -jar bookmark_libraryV4.jar` (replace the filename with the correct one if you have renamed it)
 * The program will begin in your command prompt. If this is the first time you launch it, a few example bookmarks are inserted into the databse. 
 
 ### For using the program if you also want the ability to run the tests, modify source code etc.
