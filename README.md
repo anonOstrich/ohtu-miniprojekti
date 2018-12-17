@@ -44,6 +44,7 @@ Ohjelmistotuotantokurssin miniprojekti
 * To run the program, execute `java -jar build/libs/ohtu-miniprojekti-all.jar`
 
 ## User guide
+
 **Function to perform:**
 
 **1. Add a new bookmark**
