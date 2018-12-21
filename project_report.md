@@ -26,6 +26,10 @@ Projektityöskentelyssä kevyeksi pullonkaulaksi muodostui tietokannan käyttö�
 
 ### Sprintti 3
 
+Teknisiä ongelmia kohdattiin jälleen ainakin tietokannanhallinnan kanssa. Halusimme täyttää tietokannan järkevällä alkudatalla, jos tietokantaa ei ole ohjelman käynnistyessä olemassa. Perustapauksessa tämä onnistui melko helposti lukemalla insert-lausekkeet erillisestä .sql-tiedostosta, mutta lisäys-ja muokkausaikojen automaattinen lisäys näin luotuihin olioihin ei onnistunut aivan vaivatta. Aiemmassa ratkaisussa kyseiset kentät generoitiin automaattisesti kun Java-olio tallennettiin tietokantaan; tässä tapauksessa taas tietokannassa suoritettiin suoraan SQL-kutsuja, joten tämä automatisointi tehtiin tietokannanhallintajärjestelmän tasolla. Ongelmaan perehtymällä ja sopivalla googlaamisella löytyi lopulta onneksi toimiva ratkaisu. 
+
+Tällä viikolla huomasimme myös, että luokan ominaisuuksien vähentäminen ja refaktoroidut luokat aiheuttivat melko paljon vaivaa olemassaolevien testien kannalta. Olimme aiemmin jo ennakoineet monimutkaisia kirjanmerkkejä ja suuren määrän oleellisia kenttiä, mutta asiakkaan palautteen jälkeen tällä viikkolla vähensimme niiden lukumäärää ja tarvittavia tietoja. Olemassaolevat testit ja testien käyttämät tekstitiedostot vaativat paljon muokkaamista. Kenties tämä olisi voitu välttää toteuttamalla aluksi vain hyvin yksinkertaiset kirjanmerkkiluokat, ja lähteä tarkentamaan niitä vasta asiakastapaamisessä saatujen ideoiden pohjalta. 
+
 ### Sprintti 4
 
 
