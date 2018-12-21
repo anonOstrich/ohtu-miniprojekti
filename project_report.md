@@ -19,6 +19,11 @@ Ryhmän sisäistä kommunikaatiota ei tapahtunut merkittävästi ennen kuin läh
 
 ### Sprintti 2 
 
+Jonkin verran haasteita tietokannan käyttöönottamisessa. Ainakin tagien tallentaminen omana tauluna niin, että kirjanmerkin tagit haetaan ja tallennetaan tietokantaan automaattisesti kirjanmerkkiä muokatessa, aiheutti aluksi ongelman. Lopullinen ratkaisu ei skaalaudu suuremmille datamäärille, sillä tagit haetaan tietokannasta heti kun vastaava kirjanmerkkikin. Mahdolliseksi uhaksi oli tulossa varsin rakenneton ohjelma, mutta kesken sprintin lisäsimme uusia luokkia joiden vastuulla oli täysin tietynlaisten tietokantayhteyksien hallinnointi. 
+
+Projektityöskentelyssä kevyeksi pullonkaulaksi muodostui tietokannan käyttöönottaminen, sillä tämä oli tehtävä ennen kuin muita ominaisuuksia oli järkevää alkaa toteuttaa. Hyvänä asiana tietokanta saatiin käyttöön työviikon alkupuolella, ja käyttämisen tarkempi hiominen ja muiden käyttäjätarinoiden toteuttaminen pystyivät etenemään samanaikaisesti loppusprintin ajan.
+
+
 ### Sprintti 3
 
 ### Sprintti 4
