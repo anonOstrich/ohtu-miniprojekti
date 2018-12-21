@@ -32,6 +32,8 @@ Tällä viikolla huomasimme myös, että luokan ominaisuuksien vähentäminen ja
 
 ### Sprintti 4
 
+Merge-konflikteja oli jonkin verran, mutta niiden ratkaiseminen oli huomattavasti nopeampaa kuin aiempina viikkoina. Ryhmätyössä ei kohdattu juuri ongelmia tämän sprintin aikanaa. 
+
 
 Mikä sujui hyvin
 ----------------
