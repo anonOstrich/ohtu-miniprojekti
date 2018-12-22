@@ -32,13 +32,13 @@ Tällä viikolla huomasimme myös, että luokan ominaisuuksien vähentäminen ja
 
 ### Sprintti 4
 
-Merge-konflikteja oli jonkin verran, mutta niiden ratkaiseminen oli huomattavasti nopeampaa kuin aiempina viikkoina. Ryhmätyössä ei kohdattu juuri ongelmia tämän sprintin aikanaa. 
+Merge-konflikteja oli jonkin verran, mutta niiden ratkaiseminen oli huomattavasti nopeampaa kuin aiempina viikkoina. Ryhmätyössä ei kohdattu juuri ongelmia tämän sprintin aikanaa. Sprintin aikana laajennettiin jo olemassa olevia ominaisuuksia sekä refaktoroitiin koodia.  
 
 
 Mikä sujui hyvin
 ----------------
 
-Sprinttisuunnittelussa ei ahnehdittu liikaa user storyjä, ja useimmissa tapauksissa sprinttiin valitut ominaisuudet saatiin toteutettua suunnitellussa sprintissä. Kukaan ei ahnehtinut kaikkea tehtäväkseen, vaan pyrittiin neuvottelemaan ja jakamaan tehtävää tiimin kesken. Aikatauluissa ja muissa ryhmän sovituissa normeissa pitäydyttiin oikein hyvin. 
+Sprinttisuunnittelussa ei ahnehdittu liikaa user storyjä, ja useimmissa tapauksissa sprinttiin valitut ominaisuudet saatiin toteutettua suunnitellussa sprintissä. Kukaan ei ahnehtinut kaikkea tehtäväkseen, vaan pyrittiin neuvottelemaan ja jakamaan tehtävää tiimin kesken. Tätä edesautti se, että User Storyt oli jaettu helposti toteutettaviin paloihin. Aikatauluissa ja muissa ryhmän sovituissa normeissa pitäydyttiin oikein hyvin. 
 
 Parannuskohteita
 ----------------
@@ -52,4 +52,7 @@ Opimme miniprojektista miten Scrum-kehittäjätiimi voi käytännössä toimia, 
 
 `Mitä olisi halunnut oppia?`
 
-`Mikä tuntui turhalta?`
+Mikä tuntui turhalta?`
+-------------------
+
+Yhden asiakastapaamisen yhteydessä asiakas esitti uusia vaatimuksia, jotka vaativat ohjelman rakenteen uudelleen kirjoittamista. Tällöin aiempi tehtyt työ tuntui vähän turhalta. Kuitenkin tämä tilanne oli hyvin opetuksellinen ja seuraavalla kerralla osaa paremmin varautua paremmin tällaisiin tilanteisiin.
