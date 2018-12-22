@@ -50,9 +50,11 @@ Oppimisesta
 
 Opimme miniprojektista miten Scrum-kehittäjätiimi voi käytännössä toimia, ja minkälaisia onglemia se voi kohdata. Osalle tämä projekti oli ensimmäinen hieman isomman ryhmän ohjelmointiryhmän yhteisprojekti, ja projektin kuluessa oppi siihen, että valtaosa koodista ei ole omaa käsialaa. Tästä konkretisoitui miksi kaikkien yhdessä sopima definition of done ja koodistandardit ovat tärkeitä. Tällöin tehtävien keskinäisiin jakamisiin ei mene niin merkittävää työpanosta, ja tämän voi käyttää lopputuotteelle arvokkaampaan työhön.
 
-`Mitä olisi halunnut oppia?`
+Mitä olisi halunnut oppia?
+-----------------------
+Ohjelmistotuotantokurssin sisältö tarjosi tarvittat työvälineet miniprojektin toteuttamiseen. Oikeastaan ainoa asia, mitä olisi voinut vielä painottaa olisi ollut erilaiset kommunikointikointitavat projektityöskentelyssä.
 
-Mikä tuntui turhalta?`
+Mikä tuntui turhalta?
 -------------------
 
 Yhden asiakastapaamisen yhteydessä asiakas esitti uusia vaatimuksia, jotka vaativat ohjelman rakenteen uudelleen kirjoittamista. Tällöin aiempi tehtyt työ tuntui vähän turhalta. Kuitenkin tämä tilanne oli hyvin opetuksellinen ja seuraavalla kerralla osaa paremmin varautua paremmin tällaisiin tilanteisiin.
