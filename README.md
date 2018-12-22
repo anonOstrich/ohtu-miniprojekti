@@ -7,6 +7,7 @@ Codecov (test coverage): [![codecov](https://codecov.io/gh/anonOstrich/ohtu-mini
 Ohjelmistotuotantokurssin miniprojekti
 
 [Raportti projektin kulusta](project_report.md)
+
 [Product & sprint backlog](https://docs.google.com/spreadsheets/d/1JXfi_ZUgXKkfvnegcy7C4KUzVWvdBlr7t2WN6icuReA/edit#gid=0)
 
 
