@@ -4,7 +4,7 @@ Raportti projektin kulusta
 Projektiin osallistuneet henkilöt
 ---------------------------------
 
-Hannes Ihalainen, Jesper Kuutti, Veikko Laine, Anna Piirnainen, Jussi 
+Hannes Ihalainen, Jesper Kuutti, Veikko Laine, Anna Piirainen, Jussi 
 Steenari
 
 Kohdattuja ongelmia
